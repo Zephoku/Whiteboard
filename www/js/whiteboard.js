@@ -1,13 +1,10 @@
-var canvas = new fabric.Canvas('c');
+var canvas;
+$( document ).ready( function() {
+  // Initialize Drawing Canvas
+  canvas = new fabric.Canvas('whiteboard');
+  canvas.isDrawingMode = true;
 
-// create a rectangle object
-var rect = new fabric.Rect({
-  left: 100,
-  top: 100,
-  fill: 'red',
-  width: 20,
-  height: 20
+  // Set Pen Options
+  canvas.freeDrawingBrush.color = '#000';
+  canvas.freeDrawingLineWidth = 10;
 });
-
-// "add" rectangle onto canvas
-canvas.add(rect);
