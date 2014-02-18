@@ -8,3 +8,8 @@ $( document ).ready( function() {
   canvas.freeDrawingBrush.color = '#000';
   canvas.freeDrawingLineWidth = 10;
 });
+
+
+function clearFun() {
+	canvas.clear();
+}
