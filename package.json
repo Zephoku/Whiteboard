@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "phonegap": "*"
+    "phonegap": "*",
+    "ios-sim": "*"
   }
 }
