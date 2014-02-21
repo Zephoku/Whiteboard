@@ -1,31 +1,150 @@
-var canvas;
-var fab;
-var fab2;
-var fab3;
-var firebase = new Firebase('https://cs117whiteboard.firebaseio.com');
-var firebaseObjects = new Firebase('https://cs117whiteboard.firebaseio.com/objects');
+var SCALE_FACTOR = 0.5;
+var canvasScale = 1;
 
 $( document ).ready( function() {
   // Initialize Drawing Canvas
-  canvas = this.__canvas = new fabric.Canvas('whiteboard');
+  Whiteboard.canvas = new fabric.Canvas('whiteboard');
+  var canvas = Whiteboard.canvas;
+  var firebase = Whiteboard.firebase;
+
   canvas.isDrawingMode = true;
 
   // Set Pen Options
   canvas.freeDrawingBrush.color = '#000';
   canvas.freeDrawingLineWidth = 10;
-  firebaseObjects.on('child_added', function(snapshot) {
-    fab = snapshot.val();
-    fab2 = new fabric.Path("", snapshot.val());
-    canvas.add(new fabric.Path("", snapshot.val()));
 
+  firebase.on('value', function(snapshot) {
+    // Read from Firebase
+    canvas.loadFromJSON(snapshot.val());
+    //resetDefaultToZoom();
+    canvas.renderAll();
   });
 
   canvas.on("mouse:up", function () {
+    // Upload to Firebase
     var canvasData = canvas.toJSON();
-    fab3 = canvasData;
-    firebase.update(canvasData);
+    canvasData = removePathFill(canvasData);
+    //resetZoomToDefault();
+    firebase.set(canvasData);
   });
 
-  
-
 });
+
+function removePathFill(canvasData) {
+  var path;
+  for(path in canvasData.objects ) {
+    canvasData.objects[path].fill = false;
+  }
+  return canvasData;
+}
+
+function clearFun() {
+	canvas.clear();
+}
+
+function zoomOutFun() {
+  var canvas = Whiteboard.canvas;
+	var objects = canvas.getObjects();
+	    for (var i in objects) {
+	        var scaleX = objects[i].scaleX;
+	        var scaleY = objects[i].scaleY;
+	        var left = objects[i].left;
+	        var top = objects[i].top;
+	        
+	        var tempScaleX = scaleX * SCALE_FACTOR;
+	        var tempScaleY = scaleY * SCALE_FACTOR;
+	        var tempLeft = left * SCALE_FACTOR;
+	        var tempTop = top * SCALE_FACTOR;
+	        
+	        objects[i].scaleX = tempScaleX;
+	        objects[i].scaleY = tempScaleY;
+	        objects[i].left = tempLeft;
+	        objects[i].top = tempTop;
+	        
+	        objects[i].setCoords();
+	    }
+
+	canvas.renderAll();
+	canvasScale *= SCALE_FACTOR;
+}
+
+function zoomInFun() {
+  var canvas = Whiteboard.canvas;
+	var objects = canvas.getObjects();
+	    for (var i in objects) {
+	        var scaleX = objects[i].scaleX;
+	        var scaleY = objects[i].scaleY;
+	        var left = objects[i].left;
+	        var top = objects[i].top;
+	        
+	        var tempScaleX = scaleX / SCALE_FACTOR;
+	        var tempScaleY = scaleY / SCALE_FACTOR;
+	        var tempLeft = left / SCALE_FACTOR;
+	        var tempTop = top / SCALE_FACTOR;
+	        
+	        objects[i].scaleX = tempScaleX;
+	        objects[i].scaleY = tempScaleY;
+	        objects[i].left = tempLeft;
+	        objects[i].top = tempTop;
+	        
+	        objects[i].setCoords();
+	    }
+
+	canvas.renderAll();
+	canvasScale /= SCALE_FACTOR;
+
+}
+
+
+function resetZoomToDefault() {
+
+  var canvas = Whiteboard.canvas;
+	var objects = canvas.getObjects();
+    for (var i in objects) {
+        var scaleX = objects[i].scaleX;
+        var scaleY = objects[i].scaleY;
+        var left = objects[i].left;
+        var top = objects[i].top;
+    
+        var tempScaleX = scaleX * (1 / canvasScale);
+        var tempScaleY = scaleY * (1 / canvasScale);
+        var tempLeft = left * (1 / canvasScale);
+        var tempTop = top * (1 / canvasScale);
+
+        objects[i].scaleX = tempScaleX;
+        objects[i].scaleY = tempScaleY;
+        objects[i].left = tempLeft;
+        objects[i].top = tempTop;
+
+        objects[i].setCoords();
+    }
+        
+    canvas.renderAll();
+
+}
+
+function resetDefaultToZoom() {
+
+  var canvas = Whiteboard.canvas;
+	var objects = canvas.getObjects();
+    for (var i in objects) {
+        var scaleX = objects[i].scaleX;
+        var scaleY = objects[i].scaleY;
+        var left = objects[i].left;
+        var top = objects[i].top;
+    
+        var tempScaleX = scaleX * (canvasScale);
+        var tempScaleY = scaleY * (canvasScale);
+        var tempLeft = left * (canvasScale);
+        var tempTop = top * (canvasScale);
+
+        objects[i].scaleX = tempScaleX;
+        objects[i].scaleY = tempScaleY;
+        objects[i].left = tempLeft;
+        objects[i].top = tempTop;
+
+        objects[i].setCoords();
+    }
+        
+    canvas.renderAll();
+}

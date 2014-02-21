@@ -1,12 +1,12 @@
-var canvas;
-var firebase = new Firebase('https://cs117whiteboard.firebaseio.com');
-
 var SCALE_FACTOR = 0.5;
 var canvasScale = 1;
 
 $( document ).ready( function() {
   // Initialize Drawing Canvas
-  canvas = this.__canvas = new fabric.Canvas('whiteboard');
+  Whiteboard.canvas = new fabric.Canvas('whiteboard');
+  var canvas = Whiteboard.canvas;
+  var firebase = Whiteboard.firebase;
+
   canvas.isDrawingMode = true;
 
   // Set Pen Options
@@ -33,7 +33,6 @@ $( document ).ready( function() {
 function removePathFill(canvasData) {
   var path;
   for(path in canvasData.objects ) {
-    console.log(canvasData.objects[path]);
     canvasData.objects[path].fill = false;
   }
   return canvasData;
@@ -44,6 +43,7 @@ function clearFun() {
 }
 
 function zoomOutFun() {
+  var canvas = Whiteboard.canvas;
 	var objects = canvas.getObjects();
 	    for (var i in objects) {
 	        var scaleX = objects[i].scaleX;
@@ -69,6 +69,7 @@ function zoomOutFun() {
 }
 
 function zoomInFun() {
+  var canvas = Whiteboard.canvas;
 	var objects = canvas.getObjects();
 	    for (var i in objects) {
 	        var scaleX = objects[i].scaleX;
@@ -97,6 +98,7 @@ function zoomInFun() {
 
 function resetZoomToDefault() {
 
+  var canvas = Whiteboard.canvas;
 	var objects = canvas.getObjects();
     for (var i in objects) {
         var scaleX = objects[i].scaleX;
@@ -123,6 +125,7 @@ function resetZoomToDefault() {
 
 function resetDefaultToZoom() {
 
+  var canvas = Whiteboard.canvas;
 	var objects = canvas.getObjects();
     for (var i in objects) {
         var scaleX = objects[i].scaleX;
