@@ -39,6 +39,7 @@ function removePathFill(canvasData) {
 }
 
 function clearFun() {
+  var canvas = Whiteboard.canvas;
 	canvas.clear();
 }
 
