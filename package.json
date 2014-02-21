@@ -13,7 +13,6 @@
     "jade": "*",
     "node-sass": "*",
     "firebase": "*",
-    "phonegap": "*",
-    "ios-sim": "*"
+    "phonegap": "*"
   }
 }
