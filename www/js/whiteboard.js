@@ -1,6 +1,3 @@
-var SCALE_FACTOR = 0.5;
-var canvasScale = 1;
-
 $( document ).ready( function() {
   // Initialize Drawing Canvas
   Whiteboard.canvas = new fabric.Canvas('whiteboard');
@@ -39,7 +36,7 @@ $( document ).ready( function() {
     }
     $('#title').text(Whiteboard.session);
     Whiteboard.firebase = Whiteboard.firebase.root().child(Whiteboard.session);
-    clearFun();
+    clear(canvas);
     initCanvas(Whiteboard.firebase, canvas);
 
     // Update Canvas
@@ -48,7 +45,31 @@ $( document ).ready( function() {
     });
   });
 
-  
+  //set handle for clear-canvas button
+  $('#clear-canvas').click(function(){
+    clear(canvas);
+  });
+
+
+  //handler for zoom out button
+  $('#zoom-out').click(function(){
+    zoomOut(canvas);
+  });
+
+  //handler for zoom in button click
+  $('#zoom-in').click(function(){
+    zoomIn(canvas);
+  });
+
+  $('#default-view').click(function(){
+    defaultView(canvas);
+  });
+
+/*
+  $('#back-to-zoom').click(function(){
+    backToZoom(canvas);
+  });
+*/
 });
 
 function initCanvas(firebase, canvas) {
@@ -82,12 +103,116 @@ function removePathFill(canvasData) {
 }
 
 
-
-function clearFun() {
-  var canvas = Whiteboard.canvas;
-	canvas.clear();
+function clear(canvas){
+  canvas.clear();
 }
 
+function zoomOut(canvas) {
+  var objects = canvas.getObjects();
+      for (var i in objects) {
+          var scaleX = objects[i].scaleX;
+          var scaleY = objects[i].scaleY;
+          var left = objects[i].left;
+          var top = objects[i].top;
+          
+          var tempScaleX = scaleX * Whiteboard.SCALE_FACTOR;
+          var tempScaleY = scaleY * Whiteboard.SCALE_FACTOR;
+          var tempLeft = left * Whiteboard.SCALE_FACTOR;
+          var tempTop = top * Whiteboard.SCALE_FACTOR;
+          
+          objects[i].scaleX = tempScaleX;
+          objects[i].scaleY = tempScaleY;
+          objects[i].left = tempLeft;
+          objects[i].top = tempTop;
+          
+          objects[i].setCoords();
+      }
+
+  canvas.renderAll();
+  Whiteboard.canvasScale *= Whiteboard.SCALE_FACTOR;
+}
+
+function zoomIn(canvas) {
+var objects = canvas.getObjects();
+      for (var i in objects) {
+          var scaleX = objects[i].scaleX;
+          var scaleY = objects[i].scaleY;
+          var left = objects[i].left;
+          var top = objects[i].top;
+          
+          var tempScaleX = scaleX / Whiteboard.SCALE_FACTOR;
+          var tempScaleY = scaleY / Whiteboard.SCALE_FACTOR;
+          var tempLeft = left / Whiteboard.SCALE_FACTOR;
+          var tempTop = top / Whiteboard.SCALE_FACTOR;
+          
+          objects[i].scaleX = tempScaleX;
+          objects[i].scaleY = tempScaleY;
+          objects[i].left = tempLeft;
+          objects[i].top = tempTop;
+          
+          objects[i].setCoords();
+      }
+
+  canvas.renderAll();
+  Whiteboard.canvasScale /= Whiteboard.SCALE_FACTOR;
+
+}
+
+function defaultView(canvas) {
+  if(Whiteboard.canvasScale === 1) return;
+  else{
+    var objects = canvas.getObjects();
+      for (var i in objects) {
+          var scaleX = objects[i].scaleX;
+          var scaleY = objects[i].scaleY;
+          var left = objects[i].left;
+          var top = objects[i].top;
+      
+          var tempScaleX = scaleX * (1 / Whiteboard.canvasScale);
+          var tempScaleY = scaleY * (1 / Whiteboard.canvasScale);
+          var tempLeft = left * (1 / Whiteboard.canvasScale);
+          var tempTop = top * (1 / Whiteboard.canvasScale);
+
+          objects[i].scaleX = tempScaleX;
+          objects[i].scaleY = tempScaleY;
+          objects[i].left = tempLeft;
+          objects[i].top = tempTop;
+
+          objects[i].setCoords();
+      }
+          
+      canvas.renderAll();
+      Whiteboard.canvasScale = 1;
+    }
+
+}
+
+function backToZoom(canvas) {
+
+  var objects = canvas.getObjects();
+    for (var i in objects) {
+        var scaleX = objects[i].scaleX;
+        var scaleY = objects[i].scaleY;
+        var left = objects[i].left;
+        var top = objects[i].top;
+    
+        var tempScaleX = scaleX * (Whiteboard.canvasScale);
+        var tempScaleY = scaleY * (Whiteboard.canvasScale);
+        var tempLeft = left * (Whiteboard.canvasScale);
+        var tempTop = top * (Whiteboard.canvasScale);
+
+        objects[i].scaleX = tempScaleX;
+        objects[i].scaleY = tempScaleY;
+        objects[i].left = tempLeft;
+        objects[i].top = tempTop;
+
+        objects[i].setCoords();
+    }
+        
+    canvas.renderAll();
+}
+
+/*
 function zoomOutFun() {
   var canvas = Whiteboard.canvas;
 	var objects = canvas.getObjects();
@@ -112,8 +237,8 @@ function zoomOutFun() {
 
 	canvas.renderAll();
 	canvasScale *= SCALE_FACTOR;
-}
-
+}*/
+/*
 function zoomInFun() {
   var canvas = Whiteboard.canvas;
 	var objects = canvas.getObjects();
@@ -139,10 +264,10 @@ function zoomInFun() {
 	canvas.renderAll();
 	canvasScale /= SCALE_FACTOR;
 
-}
+}*/
+/*
 
-
-function resetZoomToDefault() {
+function resetZoomToDefaultFun() {
 
   var canvas = Whiteboard.canvas;
 	var objects = canvas.getObjects();
@@ -169,7 +294,11 @@ function resetZoomToDefault() {
 
 }
 
-function resetDefaultToZoom() {
+
+*/
+
+/*
+function resetDefaultToZoomFun() {
 
   var canvas = Whiteboard.canvas;
 	var objects = canvas.getObjects();
@@ -194,6 +323,7 @@ function resetDefaultToZoom() {
         
     canvas.renderAll();
 }
+*/
 
 function getURLParameter(sParam)
 {
@@ -207,4 +337,19 @@ function getURLParameter(sParam)
             return sParameterName[1];
         }
     }
+}
+
+function functErase()
+{
+	canvas.isDrawingMode = false;
+	canvas.selection = true;
+
+	canvas.on('object:selected', function(options) {
+		if(options.target)
+		{
+			canvas.remove(canvas.getActiveObject());
+		}
+
+	});
+	
 }
