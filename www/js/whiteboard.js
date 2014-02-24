@@ -5,30 +5,61 @@ $( document ).ready( function() {
   // Initialize Drawing Canvas
   Whiteboard.canvas = new fabric.Canvas('whiteboard');
   var canvas = Whiteboard.canvas;
-  var firebase = Whiteboard.firebase;
-
   canvas.isDrawingMode = true;
+  $('#title').text(Whiteboard.session);
+  //initCanvas(Whiteboard.firebase.child(Whiteboard.session), canvas);
 
   // Set Pen Options
   canvas.freeDrawingBrush.color = '#000';
   canvas.freeDrawingLineWidth = 10;
 
-  firebase.on('value', function(snapshot) {
-    // Read from Firebase
-    canvas.loadFromJSON(snapshot.val());
+
+  // Update Canvas
+  Whiteboard.firebase.on('value', function(snapshot) {
+    updateCanvas(snapshot, canvas);
+  });
+
+  // Update Firebase
+  Whiteboard.canvas.on("mouse:up", function () {
+    updateFirebase(Whiteboard.firebase, canvas)
+  });
+
+  $('#sessionSubmit').click(function() {
+    Whiteboard.session = $('#sessionId').val();
+    $('#sessionId').val('');
+    if ( Whiteboard.session === '' ) {
+        Whiteboard.session = 'Whiteboard';
+    }
+    $('#title').text(Whiteboard.session);
+    Whiteboard.firebase = Whiteboard.firebase.root().child(Whiteboard.session);
+    clearFun();
+    initCanvas(Whiteboard.firebase, canvas);
+  });
+
+  
+});
+
+function initCanvas(firebase, canvas) {
+  firebase.once('value', function(data) {
+    canvas.loadFromJSON(data.val());
     //resetDefaultToZoom();
     canvas.renderAll();
   });
+}
 
-  canvas.on("mouse:up", function () {
-    // Upload to Firebase
+function updateCanvas(snapshot, canvas) {
+    canvas.loadFromJSON(snapshot.val());
+    //resetDefaultToZoom();
+    canvas.renderAll();
+}
+
+
+function updateFirebase(firebase, canvas) {
     var canvasData = canvas.toJSON();
     canvasData = removePathFill(canvasData);
     //resetZoomToDefault();
     firebase.set(canvasData);
-  });
-
-});
+}
 
 function removePathFill(canvasData) {
   var path;
@@ -37,6 +68,8 @@ function removePathFill(canvasData) {
   }
   return canvasData;
 }
+
+
 
 function clearFun() {
   var canvas = Whiteboard.canvas;

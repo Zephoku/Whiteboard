@@ -10,11 +10,16 @@ block scripts
   script(src="js/whiteboard-angular.js")
 
 block content
-  #whiteboard-container(ng-app="whiteboardApp", ng-controller="whiteboardCtrl")
-    canvas#whiteboard( width='{{canvasWidth}}', height='{{canvasHeight}}' )
-  .btn-container
-    button(onclick="clearFun()") Clear
-    button(onclick="zoomOutFun()") Zoom Out
-    button(onclick="zoomInFun()") Zoom In
-    button(onclick="resetZoomToDefaultFun()") Default View
-    button(onclick="resetDefaultToZoomFun()") Restore Zoom
+  .whiteboard-app(ng-app="whiteboardApp")
+    .title-container
+      span#title 
+    #whiteboard-container(ng-controller="whiteboardCtrl")
+      canvas#whiteboard( width='{{canvasWidth}}', height='{{canvasHeight}}' )
+    .btn-container
+      button(onclick="clearFun()") Clear
+      button(onclick="zoomOutFun()") Zoom Out
+      button(onclick="zoomInFun()") Zoom In
+      button(onclick="resetZoomToDefaultFun()") Default View
+      button(onclick="resetDefaultToZoomFun()") Restore Zoom
+      input#sessionId(type='text', placeholder="Session ID")
+      input#sessionSubmit(type='submit')
