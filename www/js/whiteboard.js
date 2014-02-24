@@ -65,6 +65,14 @@ $( document ).ready( function() {
     defaultView(canvas);
   });
 
+  $('#select-on').click(function(){
+    selectFun(canvas);
+  });
+
+  $('#draw-on').click(function(){
+    drawFun(canvas);
+  });
+
 /*
   $('#back-to-zoom').click(function(){
     backToZoom(canvas);
@@ -324,6 +332,16 @@ function resetDefaultToZoomFun() {
     canvas.renderAll();
 }
 */
+
+function selectFun(canvas) {
+
+  canvas.isDrawingMode = false;
+}
+
+function drawFun(canvas) {
+
+  canvas.isDrawingMode = true;
+}
 
 function getURLParameter(sParam)
 {
