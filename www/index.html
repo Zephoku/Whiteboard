@@ -23,14 +23,16 @@
         <meta name="format-detection" content="telephone=no" />
         <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <link rel="stylesheet" type="text/css" href="css/reset.css" />
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
         <link rel="stylesheet" type="text/css" href="css/whiteboard.css" />
-        <link rel="stylesheet" type="text/css" href="css/index.css" />
+        <script type="text/javascript" src="js/jquery.js"></script>
         <script type="text/javascript" src="js/angular.js"></script>
+        <script type="text/javascript" src="js/fabric.js"></script>
+        <script type="text/javascript" src="js/bootstrap.js"></script>
         <script type='text/javascript' src='https://cdn.firebase.com/js/client/1.0.6/firebase.js'></script>
         <script type="text/javascript" src='https://cdn.firebase.com/libs/angularfire/0.6.0/angularfire.min.js'></script>
         <script type="text/javascript" src='https://cdn.firebase.com/js/simple-login/1.2.3/firebase-simple-login.js'></script>
-        <script type="text/javascript" src="js/jquery.js"></script>
-        <script type="text/javascript" src="js/fabric.js"></script>
         <script type="text/javascript" src="js/globals.js"></script>
         <script type="text/javascript" src="js/whiteboard.js"></script>
         <script type="text/javascript" src="js/whiteboard-angular.js"></script>
@@ -39,20 +41,30 @@
     </head>
     <body>
 
-    <div id="whiteboard-container" ng-app="whiteboardApp" ng-controller="whiteboardCtrl">
-      <canvas id="whiteboard" width="{{canvasWidth}}" height="{{canvasHeight}}"><canvas>
-    </div>
     
-    <div class="btn-container">
-        <button id="clear-canvas">Clear</button>
-        <button id="zoom-out">Zoom Out</button>
-        <button id="zoom-in">Zoom In</button>
-        <button id="default-view">100%</button>
-        <button id="pan-down">Down</button>
-        <button id="pan-up">Up</button>
-        <button id="pan-left">Left</button>
-        <button id="pan-right">Right</button>
+
+    <div class="whiteboard-app" ng-app"whiteboardApp">
+      <div class="title-container">
+        <span id="title"></span>
+      </div>
+      <div id="whiteboard-container" ng-app="whiteboardApp" ng-controller="whiteboardCtrl">
+        <canvas id="whiteboard" width="{{canvasWidth}}" height="{{canvasHeight}}"><canvas>
+      </div>
+
+          <div class="btn-container">
+            <button id="clear-canvas">Clear</button>
+            <button id="zoom-out">Zoom Out</button>
+            <button id="zoom-in">Zoom In</button>
+            <button id="default-view">100%</button>
+            <button id="erase" OnClick = "functErase()">Erase</button></div>
+            <input id="sessionId" type="text" placeholder="Session ID"> </input>
+            <input id="sessionSubmit" type="submit"></input>
+             <button id="pan-down">Down</button>
+            <button id="pan-up">Up</button>
+            <button id="pan-left">Left</button>
+            <button id="pan-right">Right</button>
+          </div>
     </div>
-    
+
     </body>
 </html>
