@@ -121,3 +121,18 @@ function resetDefaultToZoom() {
 
 
 }
+
+function functErase()
+{
+	canvas.isDrawingMode = false;
+	canvas.selection = true;
+
+	canvas.on('object:selected', function(options) {
+		if(options.target)
+		{
+			canvas.remove(canvas.getActiveObject());
+		}
+
+	});
+	
+}
