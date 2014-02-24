@@ -94,7 +94,7 @@ $( document ).ready( function() {
     backToZoom(canvas);
   });
 */
-
+});
 
 function initCanvas(firebase, canvas) {
   firebase.once('value', function(data) {
@@ -310,3 +310,4 @@ function functErase(canvas)
 	});
 	
 }
+
