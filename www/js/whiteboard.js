@@ -289,6 +289,9 @@ function pan(canvas, dir) {
 function selectFun(canvas) {
 
   canvas.isDrawingMode = false;
+
+  canvas.off('object:selected');
+
 }
 
 function drawFun(canvas) {
