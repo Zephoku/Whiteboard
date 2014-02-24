@@ -182,3 +182,15 @@ function resetDefaultToZoom() {
         
     canvas.renderAll();
 }
+
+function selectFun() {
+
+  var canvas = Whiteboard.canvas;
+  canvas.isDrawingMode = false;
+}
+
+function drawFun() {
+
+  var canvas = Whiteboard.canvas;
+  canvas.isDrawingMode = true;
+}
