@@ -35,12 +35,12 @@ $( document ).ready( function() {
         Whiteboard.session = 'Whiteboard';
     }
     $('#title').text(Whiteboard.session);
+    Whiteboard.firebase.off("value");
     Whiteboard.firebase = Whiteboard.firebase.root().child(Whiteboard.session);
     clear(canvas);
     initCanvas(Whiteboard.firebase, canvas);
 
     // Remove old listerner
-    Whiteboard.firebase.off("value");
     // Update Canvas
     Whiteboard.firebase.on('value', function(snapshot) {
       updateCanvas(snapshot, canvas);
