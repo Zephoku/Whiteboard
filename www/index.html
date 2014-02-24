@@ -41,14 +41,14 @@
     </head>
     <body>
 
-    
+
     <div class="whiteboard-app" ng-app"whiteboardApp">
-      <div class="title-container">
-        <span id="title"></span>
-      </div>
-      <div id="whiteboard-container" ng-app="whiteboardApp" ng-controller="whiteboardCtrl">
-        <canvas id="whiteboard" width="{{canvasWidth}}" height="{{canvasHeight}}"><canvas>
-      </div>
+          <div class="title-container">
+            <span id="title"></span>
+          </div>
+          <div id="whiteboard-container" ng-app="whiteboardApp" ng-controller="whiteboardCtrl">
+            <canvas id="whiteboard" width="{{canvasWidth}}" height="{{canvasHeight}}"><canvas>
+          </div>
 
           <div class="btn-container">
             <button id="select-on">Select</button>
@@ -57,7 +57,11 @@
             <button id="zoom-out">Zoom Out</button>
             <button id="zoom-in">Zoom In</button>
             <button id="default-view">100%</button>
-            <button id="erase" OnClick = "functErase()">Erase</button>
+            <button id="erase">Erase</button>
+            <button id="pan-down">Down</button>
+            <button id="pan-up">Up</button>
+            <button id="pan-left">Left</button>
+            <button id="pan-right">Right</button>
             <input id="sessionId" type="text" placeholder="Session ID">
             <input id="sessionSubmit" type="submit">
           </div>
