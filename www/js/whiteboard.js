@@ -53,6 +53,10 @@ $( document ).ready( function() {
     defaultView(canvas);
   });
 
+  $('#erase').click(function(){
+  	functErase(canvas);
+  });
+
 /*
   $('#back-to-zoom').click(function(){
     backToZoom(canvas);
@@ -313,7 +317,7 @@ function resetDefaultToZoomFun() {
 }
 */
 
-function functErase()
+function functErase(canvas)
 {
 	canvas.isDrawingMode = false;
 	canvas.selection = true;
