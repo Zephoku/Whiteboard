@@ -1,0 +1,25 @@
+extends layout
+
+block links
+  link(rel="stylesheet", href="/css/whiteboard.css")
+
+block scripts
+  script(src="js/fabric.js")
+  script(src="js/globals.js")
+  script(src="js/whiteboard.js")
+  script(src="js/whiteboard-angular.js")
+
+block content
+  .whiteboard-app(ng-app="whiteboardApp")
+    .title-container
+      span#title 
+    #whiteboard-container(ng-controller="whiteboardCtrl")
+      canvas#whiteboard( width='{{canvasWidth}}', height='{{canvasHeight}}' )
+    .btn-container
+      button(onclick="clearFun()") Clear
+      button(onclick="zoomOutFun()") Zoom Out
+      button(onclick="zoomInFun()") Zoom In
+      button(onclick="resetZoomToDefaultFun()") Default View
+      button(onclick="resetDefaultToZoomFun()") Restore Zoom
+      input#sessionId(type='text', placeholder="Session ID")
+      input#sessionSubmit(type='submit')

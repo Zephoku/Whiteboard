@@ -25,41 +25,31 @@
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
         <link rel="stylesheet" type="text/css" href="css/whiteboard.css" />
         <link rel="stylesheet" type="text/css" href="css/index.css" />
-        <script type="text/javascript" src="js/jquery-2.1.0.js"></script>
+        <script type="text/javascript" src="js/angular.js"></script>
+        <script type='text/javascript' src='https://cdn.firebase.com/js/client/1.0.6/firebase.js'></script>
+        <script type="text/javascript" src='https://cdn.firebase.com/libs/angularfire/0.6.0/angularfire.min.js'></script>
+        <script type="text/javascript" src='https://cdn.firebase.com/js/simple-login/1.2.3/firebase-simple-login.js'></script>
+        <script type="text/javascript" src="js/jquery.js"></script>
         <script type="text/javascript" src="js/fabric.js"></script>
+        <script type="text/javascript" src="js/globals.js"></script>
         <script type="text/javascript" src="js/whiteboard.js"></script>
+        <script type="text/javascript" src="js/whiteboard-angular.js"></script>
+
         <title>Whiteboard</title>
     </head>
     <body>
 
-    <div id="whiteboard-container">
-      <canvas id="whiteboard" width="500" height="500"><canvas>
+    <div id="whiteboard-container" ng-app="whiteboardApp" ng-controller="whiteboardCtrl">
+      <canvas id="whiteboard" width="{{canvasWidth}}" height="{{canvasHeight}}"><canvas>
     </div>
-
-    <div style="display: inline-block; margin-left: 10px; margin-top: 10px;">
-        <button id="clear-canvas" onclick="clearFun()">Clear</button>
-    </div>
-
-     <div style="display: inline-block; margin-left: 10px; margin-top: 10px;">
-        <button id="zoom-in-canvas" onclick="zoomOutFun()">Zoom Out</button>
-    </div>
-
-     <div style="display: inline-block; margin-left: 10px; margin-top: 10px;">
-        <button id="zoom-in-canvas" onclick="zoomInFun()">Zoom In</button>
-    </div>
-
-     <div style="display: inline-block; margin-left: 10px; margin-top: 10px;">
-        <button id="zoom-in-canvas" onclick="resetZoomToDefault()">Default View</button>
-    </div>
-
-    <div style="display: inline-block; margin-left: 10px; margin-top: 10px;">
-        <button id="zoom-in-canvas" onclick="resetDefaultToZoom()">Restore Zoom</button>
-
-    <div style="display: inline-block; margin-left: 10px; margin-top: 10px;">
+    
+    <div class="btn-container">
+        <button id="clear-canvas">Clear</button>
+        <button id="zoom-out">Zoom Out</button>
+        <button id="zoom-in">Zoom In</button>
+        <button id="default-view">100%</button>
         <button id="erase" OnClick = "functErase()">Erase</button></div>
     </div>
-
-
 
     </body>
 </html>

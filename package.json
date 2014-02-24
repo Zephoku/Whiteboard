@@ -9,7 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "phonegap": "*",
-    "ios-sim": "*"
+    "express": "3.4.8",
+    "jade": "*",
+    "node-sass": "*",
+    "firebase": "*",
+    "phonegap": "*"
   }
 }
