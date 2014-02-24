@@ -4,12 +4,19 @@ $( document ).ready( function() {
   var canvas = Whiteboard.canvas;
   canvas.isDrawingMode = true;
   $('#title').text(Whiteboard.session);
-  //initCanvas(Whiteboard.firebase.child(Whiteboard.session), canvas);
+  var sessionQuery = getURLParameter('session');
+  if ( sessionQuery !== undefined ) {
+    $('#title').text(sessionQuery);
+    Whiteboard.session = sessionQuery;
+    console.log(sessionQuery);
+    Whiteboard.firebase = Whiteboard.firebase.root().child(Whiteboard.session);
+    clearFun();
+    initCanvas(Whiteboard.firebase, canvas);
+  }
 
   // Set Pen Options
   canvas.freeDrawingBrush.color = '#000';
   canvas.freeDrawingLineWidth = 10;
-
 
   // Update Canvas
   Whiteboard.firebase.on('value', function(snapshot) {
@@ -31,6 +38,11 @@ $( document ).ready( function() {
     Whiteboard.firebase = Whiteboard.firebase.root().child(Whiteboard.session);
     clear(canvas);
     initCanvas(Whiteboard.firebase, canvas);
+
+    // Update Canvas
+    Whiteboard.firebase.on('value', function(snapshot) {
+      updateCanvas(snapshot, canvas);
+    });
   });
 
   //set handle for clear-canvas button
@@ -316,6 +328,21 @@ function resetDefaultToZoomFun() {
     canvas.renderAll();
 }
 */
+
+
+function getURLParameter(sParam)
+{
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++)
+    {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam)
+        {
+            return sParameterName[1];
+        }
+    }
+}
 
 function functErase(canvas)
 {
