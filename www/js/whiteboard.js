@@ -39,6 +39,8 @@ $( document ).ready( function() {
     clear(canvas);
     initCanvas(Whiteboard.firebase, canvas);
 
+    // Remove old listerner
+    Whiteboard.firebase.off("value");
     // Update Canvas
     Whiteboard.firebase.on('value', function(snapshot) {
       updateCanvas(snapshot, canvas);
