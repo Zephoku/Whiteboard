@@ -328,11 +328,35 @@ function getURLParameter(sParam)
     }
 }
 
+//erase functionality implementation 
 function functErase(canvas)
 {
 	canvas.isDrawingMode = false;
 	canvas.selection = true;
 
+  //if multiple objects are selected before the erase button is clicked, then we want erase those objects
+  var multObj = canvas.getActiveGroup();
+
+  if(multObj)
+  {
+    multObj.forEachObject(function (obj) {
+      canvas.remove(obj);
+    });
+
+    canvas.discardActiveGroup().renderAll();
+  }
+
+  //if just one object is selected before the erase button is clicked, then we want to erase only that object
+
+  var oneObj = canvas.getActiveObject();
+
+  if(oneObj)
+  {
+    canvas.remove(oneObj);
+    canvas.renderAll();
+  }
+
+  //if no object is selected prior to hitting the erase button, then delete what user clicks an object
 	canvas.on('object:selected', function(options) {
 		if(options.target)
 		{
