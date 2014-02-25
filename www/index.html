@@ -43,14 +43,15 @@
 
 
     <div class="whiteboard-app" ng-app"whiteboardApp">
-          <div class="title-container">
-            <span id="title"></span>
-          </div>
-          <div id="whiteboard-container" ng-app="whiteboardApp" ng-controller="whiteboardCtrl">
-            <canvas id="whiteboard" width="{{canvasWidth}}" height="{{canvasHeight}}"><canvas>
-          </div>
 
-          <div class="btn-container">
+        <div class="title-container">
+            <span id="title"></span>
+        </div>
+        <div id="whiteboard-container" ng-app="whiteboardApp" ng-controller="whiteboardCtrl">
+            <canvas id="whiteboard" width="{{canvasWidth}}" height="{{canvasHeight}}"></canvas>
+        </div>
+
+        <div class="btn-container">
             <button id="select-on">Select</button>
             <button id="draw-on">Draw</button>
             <button id="clear-canvas">Clear</button>
@@ -64,7 +65,14 @@
             <button id="pan-right">Right</button>
             <input id="sessionId" type="text" placeholder="Session ID">
             <input id="sessionSubmit" type="submit">
-          </div>
+            <!-- For pen -->
+            <br>
+            <span class="info" style="color:white">Pen Size: </span>
+            <span class="info" style="color:white">5</span>
+            <input type="range" value="5" min="1" max="150" id="drawing-line-width">
+            <span class="info" style="color:white">Pen Color: </span>
+            <input type="color" value="#000" id="drawing-color">
+        </div>
     </div>
 
     </body>

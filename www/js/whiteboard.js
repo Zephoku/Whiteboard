@@ -14,10 +14,6 @@ $( document ).ready( function() {
     initCanvas(Whiteboard.firebase, canvas);
   }
 
-  // Set Pen Options
-  canvas.freeDrawingBrush.color = '#000';
-  canvas.freeDrawingLineWidth = 10;
-
   // Update Canvas
   Whiteboard.firebase.on('value', function(snapshot) {
     updateCanvas(snapshot, canvas);
@@ -51,7 +47,6 @@ $( document ).ready( function() {
   $('#clear-canvas').click(function(){
     clear(canvas);
   });
-
 
   //handler for zoom out button
   $('#zoom-out').click(function(){
@@ -94,6 +89,26 @@ $( document ).ready( function() {
   $('#pan-right').click(function(){
     pan(canvas, 'right');
   });
+
+  // Pen size and color
+  // Pulled from http://fabricjs.com/freedrawing/
+  var drawingLineWidthE1 = document.getElementById("drawing-line-width");
+  var drawingColorE1 = document.getElementById("drawing-color");
+
+  drawingLineWidthE1.onchange = function() {
+    canvas.freeDrawingBrush.width = parseInt(this.value, 10) || 1;
+    this.previousSibling.previousSibling.innerHTML = this.value;
+  }
+
+  drawingColorE1.onchange = function() {
+    canvas.freeDrawingBrush.color = this.value;
+  }
+
+  // Set defaults for pen size and color
+  if (canvas.freeDrawingBrush) {
+    canvas.freeDrawingBrush.color = drawingColorE1.value;
+    canvas.freeDrawingBrush.width = parseInt(drawingLineWidthE1.value, 10) || 1;
+  }
 
 /*
   $('#back-to-zoom').click(function(){
@@ -286,8 +301,6 @@ function pan(canvas, dir) {
     Whiteboard.yOffset += tempYOffset;
 }
 
-
-
 function selectFun(canvas) {
 
   canvas.isDrawingMode = false;
@@ -325,8 +338,5 @@ function functErase(canvas)
 		{
 			canvas.remove(canvas.getActiveObject());
 		}
-
 	});
-	
 }
-
