@@ -2,6 +2,9 @@ $( document ).ready( function() {
   // Initialize Drawing Canvas
   Whiteboard.canvas = new fabric.Canvas('whiteboard');
   var canvas = Whiteboard.canvas;
+  //yosh added:
+  var stackSingle = new Array();
+  var stackMultiple = new Array();
   canvas.isDrawingMode = true;
   $('#title').text(Whiteboard.session);
   var sessionQuery = getURLParameter('session');
@@ -67,7 +70,7 @@ $( document ).ready( function() {
   });
 
   $('#erase').click(function(){
-  	functErase(canvas);
+  	functErase(canvas, stackSingle, stackMultiple);
   });
 
   $('#default-view').click(function(){
@@ -89,6 +92,10 @@ $( document ).ready( function() {
   $('#pan-right').click(function(){
     pan(canvas, 'right');
   });
+
+  $('#undo').click(function(){
+    functUndo(canvas, stackSingle, stackMultiple);
+  })
 
   // Pen size and color
   // Pulled from http://fabricjs.com/freedrawing/
@@ -329,17 +336,19 @@ function getURLParameter(sParam)
 }
 
 //erase functionality implementation 
-function functErase(canvas)
+function functErase(canvas, stackSingle, stackMultiple)
 {
 	canvas.isDrawingMode = false;
 	canvas.selection = true;
 
-  //if multiple objects are selected before the erase button is clicked, then we want erase those objects
+  //if multiple objects are selected before the erase button is clicked, then we want to erase those objects
   var multObj = canvas.getActiveGroup();
 
   if(multObj)
   {
     multObj.forEachObject(function (obj) {
+      var toDelete = obj;
+      stackMultiple.push(toDelete);
       canvas.remove(obj);
     });
 
@@ -352,6 +361,8 @@ function functErase(canvas)
 
   if(oneObj)
   {
+    
+    stackSingle.push(oneObj);
     canvas.remove(oneObj);
     canvas.renderAll();
   }
@@ -360,7 +371,33 @@ function functErase(canvas)
 	canvas.on('object:selected', function(options) {
 		if(options.target)
 		{
-			canvas.remove(canvas.getActiveObject());
+      var toRemove = canvas.getActiveObject();
+      
+      if(toRemove)
+      {
+        stackSingle.push(toRemove);
+      }
+
+			canvas.remove(canvas.getActiveObject()).renderAll();
 		}
 	});
+}
+
+//undo-erase functionality implementation 
+function functUndo(canvas, stackSingle, stackMultiple)
+{
+    canvas.isDrawingMode = false;
+    var object = stackSingle.pop();
+    if(object)
+    {
+      canvas.add(object).renderAll();
+      return;
+    }
+
+    var multObj = stackMultiple.pop();
+    while(multObj)
+    {
+      canvas.add(multObj).renderAll();
+      multObj = stackMultiple.pop();
+    }
 }
