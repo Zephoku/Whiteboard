@@ -397,12 +397,7 @@ function functUndo(canvas, stackErase)
     canvas.isDrawingMode = false;
     var object = stackErase.pop();
     
-    if(object && (object.length == 1))
-    {
-      canvas.add(object[0]).renderAll();
-      return;
-    }
-    else if(object && (object.length != 1))
+    if(object)
     {
       var multObj = object.pop();
       while(multObj)
