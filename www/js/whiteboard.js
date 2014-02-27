@@ -3,8 +3,7 @@ $( document ).ready( function() {
   Whiteboard.canvas = new fabric.Canvas('whiteboard');
   var canvas = Whiteboard.canvas;
   //yosh added:
-  var stackSingle = new Array();
-  var stackMultiple = new Array();
+  var stackErase = new Array();
   canvas.isDrawingMode = true;
   $('#title').text(Whiteboard.session);
   var sessionQuery = getURLParameter('session');
@@ -70,7 +69,7 @@ $( document ).ready( function() {
   });
 
   $('#erase').click(function(){
-  	functErase(canvas, stackSingle, stackMultiple);
+  	functErase(canvas, stackErase);
   });
 
   $('#default-view').click(function(){
@@ -94,7 +93,7 @@ $( document ).ready( function() {
   });
 
   $('#undo').click(function(){
-    functUndo(canvas, stackSingle, stackMultiple);
+    functUndo(canvas, stackErase);
   })
 
   // Pen size and color
@@ -336,7 +335,7 @@ function getURLParameter(sParam)
 }
 
 //erase functionality implementation 
-function functErase(canvas, stackSingle, stackMultiple)
+function functErase(canvas, stackErase)
 {
 	canvas.isDrawingMode = false;
 	canvas.selection = true;
@@ -346,12 +345,17 @@ function functErase(canvas, stackSingle, stackMultiple)
 
   if(multObj)
   {
+
+    var multObjToPush = new Array();
+
     multObj.forEachObject(function (obj) {
-      var toDelete = obj;
-      stackMultiple.push(toDelete);
+      
+      var toRemove = obj;
+      multObjToPush.push(toRemove);
       canvas.remove(obj);
     });
 
+    stackErase.push(multObjToPush);
     canvas.discardActiveGroup().renderAll();
   }
 
@@ -361,8 +365,9 @@ function functErase(canvas, stackSingle, stackMultiple)
 
   if(oneObj)
   {
-    
-    stackSingle.push(oneObj);
+    var oneObjToPush = new Array();
+    oneObjToPush.push(oneObj);
+    stackErase.push(oneObjToPush);
     canvas.remove(oneObj);
     canvas.renderAll();
   }
@@ -375,29 +380,35 @@ function functErase(canvas, stackSingle, stackMultiple)
       
       if(toRemove)
       {
-        stackSingle.push(toRemove);
+        var oneObjToPush = new Array();
+        oneObjToPush.push(toRemove);
+        stackErase.push(oneObjToPush);
       }
 
-			canvas.remove(canvas.getActiveObject()).renderAll();
+			canvas.remove(canvas.getActiveObject());
+      canvas.renderAll();
 		}
 	});
 }
 
 //undo-erase functionality implementation 
-function functUndo(canvas, stackSingle, stackMultiple)
+function functUndo(canvas, stackErase)
 {
     canvas.isDrawingMode = false;
-    var object = stackSingle.pop();
-    if(object)
+    var object = stackErase.pop();
+    
+    if(object && (object.length == 1))
     {
-      canvas.add(object).renderAll();
+      canvas.add(object[0]).renderAll();
       return;
     }
-
-    var multObj = stackMultiple.pop();
-    while(multObj)
+    else if(object && (object.length != 1))
     {
-      canvas.add(multObj).renderAll();
-      multObj = stackMultiple.pop();
+      var multObj = object.pop();
+      while(multObj)
+      {
+        canvas.add(multObj).renderAll();
+        multObj = object.pop();
+      }
     }
 }
