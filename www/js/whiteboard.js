@@ -116,6 +116,19 @@ $( document ).ready( function() {
     canvas.freeDrawingBrush.width = parseInt(drawingLineWidthE1.value, 10) || 1;
   }
 
+  // Text (basic)
+  $('#add-text').click(function(){
+    var inputText = document.getElementById("input-text").value;
+    // console.log(inputText);
+
+    canvas.add(new fabric.Text(inputText, { 
+      left: 100, 
+      top: 100 
+    }));
+
+  });
+
+
 /*
   $('#back-to-zoom').click(function(){
     backToZoom(canvas);
