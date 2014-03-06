@@ -1,3 +1,107 @@
 @import "bourbon/bourbon";
 @import "bitters/bitters";
 @import "neat/neat";
+
+$wb-size: 10px;
+$wb-shadow-color: #222;
+
+.whiteboard {
+  width: 100%;
+  background: url('/img/wall.png');
+}
+
+.top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 0;
+  width: 100%;
+  border-top: 10px solid #333333;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+  
+  box-shadow: 0 5px 4px -2px $wb-shadow-color;
+}
+
+.bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 0;
+  width: 100%;
+  border-bottom: 10px solid #000000;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+
+  box-shadow: 0 -5px 4px -2px $wb-shadow-color;
+}
+
+.left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0;
+  border-bottom: 10px solid transparent;
+	border-left: 10px solid #000000;
+	border-top: 10px solid transparent;
+
+  box-shadow: 0 -5px 4px 2px $wb-shadow-color;
+}
+
+.right {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 0;
+  border-bottom: 10px solid transparent;
+	border-right: 10px solid #333333;
+	border-top: 10px solid transparent;
+
+  box-shadow: 0 5px 4px 2px $wb-shadow-color;
+}
+
+.header {
+  @include outer-container;
+  padding-top: 200px;
+}
+
+.title, .subtitle {
+  @include span-columns(6);
+}
+.subtitle {
+  @include shift(3);
+}
+
+.title {
+  padding-bottom: 30px;
+  @include shift(3);
+}
+
+.content {
+  min-height: 5000px;
+}
+
+.assets {
+  @include outer-container;
+  z-index: -1;
+}
+
+.dryerase, .redmarker{
+  position: absolute;
+  @include span-columns(3);
+}
+
+.dryerase {
+  bottom: 10px;
+  left: 50px;
+  width: 100px;
+}
+
+.redmarker {
+  bottom: 10px;
+  left: 180px;
+  width: 100px;
+}
+

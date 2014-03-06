@@ -3,5 +3,22 @@ extends layout
 block links
   link(rel='stylesheet', href='/css/main.css')
 
+block scripts
+  script(src='/js/main.js')
+
 block content
-  h1 Hello World
+  .whiteboard
+    .assets
+      img.dryerase(src="img/dryerase.png")
+      img.redmarker(src="img/redmarker.png")
+    .top
+    .right
+    .bottom
+    .left
+    .header
+      .title
+        img(src="img/whiteboard.png")
+      .subtitle
+        img(src="img/whiteboard-sub.png")
+  .content 
+    h1 content

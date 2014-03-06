@@ -254,3 +254,116 @@ dl {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
+
+.whiteboard {
+  width: 100%;
+  background: url('/img/wall.png'); }
+
+.top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 0;
+  width: 100%;
+  border-top: 10px solid #333333;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  box-shadow: 0 5px 4px -2px #222; }
+
+.bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 0;
+  width: 100%;
+  border-bottom: 10px solid #000000;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  box-shadow: 0 -5px 4px -2px #222; }
+
+.left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0;
+  border-bottom: 10px solid transparent;
+  border-left: 10px solid #000000;
+  border-top: 10px solid transparent;
+  box-shadow: 0 -5px 4px 2px #222; }
+
+.right {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 0;
+  border-bottom: 10px solid transparent;
+  border-right: 10px solid #333333;
+  border-top: 10px solid transparent;
+  box-shadow: 0 5px 4px 2px #222; }
+
+.header {
+  *zoom: 1;
+  max-width: 68em;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 200px; }
+  .header:before, .header:after {
+    content: " ";
+    display: table; }
+  .header:after {
+    clear: both; }
+
+.title, .subtitle {
+  float: left;
+  display: block;
+  margin-right: 2.35765%;
+  width: 48.82117%; }
+  .title:last-child, .subtitle:last-child {
+    margin-right: 0; }
+
+.subtitle {
+  margin-left: 25.58941%; }
+
+.title {
+  padding-bottom: 30px;
+  margin-left: 25.58941%; }
+
+.content {
+  min-height: 5000px; }
+
+.assets {
+  *zoom: 1;
+  max-width: 68em;
+  margin-left: auto;
+  margin-right: auto;
+  z-index: -1; }
+  .assets:before, .assets:after {
+    content: " ";
+    display: table; }
+  .assets:after {
+    clear: both; }
+
+.dryerase, .redmarker {
+  position: absolute;
+  float: left;
+  display: block;
+  margin-right: 2.35765%;
+  width: 23.23176%; }
+  .dryerase:last-child, .redmarker:last-child {
+    margin-right: 0; }
+
+.dryerase {
+  bottom: 10px;
+  left: 50px;
+  width: 100px; }
+
+.redmarker {
+  bottom: 10px;
+  left: 180px;
+  width: 100px; }
+
+#whiteboard {
+  height: 800px;
+  width: 800px; }
