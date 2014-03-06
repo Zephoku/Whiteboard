@@ -22,9 +22,8 @@ $( document ).ready( function() {
   });
 
   // Update Firebase
-  Whiteboard.canvas.on("mouse:up", function () {
-    updateFirebase(Whiteboard.firebase, canvas)
-  });
+  updateOnEvent('mouse:up', Whiteboard.firebase, canvas);
+  
 
   $('#sessionSubmit').click(function() {
     Whiteboard.session = $('#sessionId').val();
@@ -47,7 +46,7 @@ $( document ).ready( function() {
 
   //set handle for clear-canvas button
   $('#clear-canvas').click(function(){
-    clear(canvas);
+    clearAndUpdate(Whiteboard.firebase, canvas);
   });
 
   //handler for zoom out button
@@ -125,6 +124,8 @@ $( document ).ready( function() {
       left: 100, 
       top: 100 
     }));
+    canvas.renderAll();
+    updateFirebase(Whiteboard.firebase, canvas);
 
   });
 
@@ -139,22 +140,21 @@ $( document ).ready( function() {
 function initCanvas(firebase, canvas) {
   firebase.once('value', function(data) {
     canvas.loadFromJSON(data.val());
-    //resetDefaultToZoom();
+    backToZoom(canvas);
     canvas.renderAll();
   });
 }
 
 function updateCanvas(snapshot, canvas) {
     canvas.loadFromJSON(snapshot.val());
-    //resetDefaultToZoom();
+    backToZoom(canvas);
     canvas.renderAll();
 }
 
 
 function updateFirebase(firebase, canvas) {
-    var canvasData = canvas.toJSON();
-    canvasData = removePathFill(canvasData);
-    //resetZoomToDefault();
+    scaleToDefaultView(canvas);
+    var canvasData = JSON.stringify(canvas);
     firebase.set(canvasData);
 }
 
@@ -166,6 +166,10 @@ function removePathFill(canvasData) {
   return canvasData;
 }
 
+function clearAndUpdate(firebase, canvas) {
+  canvas.clear(); 
+  updateFirebase(firebase, canvas);
+}
 
 function clear(canvas){
   canvas.clear();
@@ -219,6 +223,34 @@ var objects = canvas.getObjects();
 
   canvas.renderAll();
   Whiteboard.canvasScale /= Whiteboard.SCALE_FACTOR;
+
+}
+
+function scaleToDefaultView(canvas) {
+  if(Whiteboard.canvasScale === 1) return;
+  else{
+    var objects = canvas.getObjects();
+      for (var i in objects) {
+          var scaleX = objects[i].scaleX;
+          var scaleY = objects[i].scaleY;
+          var left = objects[i].left;
+          var top = objects[i].top;
+      
+          var tempScaleX = scaleX * (1 / Whiteboard.canvasScale);
+          var tempScaleY = scaleY * (1 / Whiteboard.canvasScale);
+          var tempLeft = left * (1 / Whiteboard.canvasScale);
+          var tempTop = top * (1 / Whiteboard.canvasScale);
+
+          objects[i].scaleX = tempScaleX;
+          objects[i].scaleY = tempScaleY;
+          objects[i].left = tempLeft;
+          objects[i].top = tempTop;
+
+          objects[i].setCoords();
+      }
+          
+      canvas.renderAll();
+    }
 
 }
 
@@ -419,4 +451,10 @@ function functUndo(canvas, stackErase)
         multObj = object.pop();
       }
     }
+}
+
+function updateOnEvent(eventName, firebase, canvas) {
+  canvas.on(eventName, function() {
+    updateFirebase(firebase, canvas);
+  });
 }
