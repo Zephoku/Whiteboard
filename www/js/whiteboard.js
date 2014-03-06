@@ -24,7 +24,7 @@ $( document ).ready( function() {
   // Update Firebase
   updateOnEvent('mouse:up', Whiteboard.firebase, canvas);
   
-
+  // Create New Rooms
   $('#sessionSubmit').click(function() {
     Whiteboard.session = $('#sessionId').val();
     $('#sessionId').val('');
@@ -32,12 +32,19 @@ $( document ).ready( function() {
         Whiteboard.session = 'Whiteboard';
     }
     $('#title').text(Whiteboard.session);
+
+    // Remove old listerner
     Whiteboard.firebase.off("value");
+    Whiteboard.canvas.off();
+    
     Whiteboard.firebase = Whiteboard.firebase.root().child(Whiteboard.session);
     clear(canvas);
     initCanvas(Whiteboard.firebase, canvas);
 
-    // Remove old listerner
+
+    // Update Firebase
+    updateOnEvent('mouse:up', Whiteboard.firebase, canvas);
+
     // Update Canvas
     Whiteboard.firebase.on('value', function(snapshot) {
       updateCanvas(snapshot, canvas);
