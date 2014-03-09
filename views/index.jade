@@ -5,20 +5,70 @@ block links
 
 block scripts
   script(src='/js/main.js')
+  script(src="http://durated.github.io/angular-scroll/0.2.2/angular-scroll.min.js")
+  script(src="http://durated.github.io/angular-parallax/angular-parallax.min.js")
+  script(src="/js/parallax.js")
 
 block content
-  .whiteboard
-    .assets
-      img.dryerase(src="img/dryerase.png")
-      img.redmarker(src="img/redmarker.png")
-    .top
-    .right
-    .bottom
-    .left
-    .header
-      .title
-        img(src="img/whiteboard.png")
-      .subtitle
-        img(src="img/whiteboard-sub.png")
-  .content 
-    h1 content
+  .content(ng-app="whiteParaApp", ng-controller="whiteParaCtrl")
+    .whiteboard
+      .assets
+        img.line(src="img/draw1.png", du-parallax y="asset1")
+        img.leaf(src="img/draw2.png", du-parallax y="asset2")
+        img.sun(src="img/draw4.png", du-parallax y="asset3")
+        img.dryerase(src="img/dryerase.png")
+        img.redmarker(src="img/redmarker.png")
+      .top
+      .right
+      .bottom
+      .left
+      .header
+        .title
+          img(src="img/whiteboard.png")
+        .subtitle
+          img(src="img/whiteboard-sub.png")
+        .register
+          .link
+            a(href="/board") Register
+    .heroes
+      .hero.description
+        .container
+          .text
+            h1 Whiteboard is a collaborative note taking that works
+          p 
+            | Type, draw, design, collaborate all in realtime.
+            | Sync between all of your devices.
+      .hero.parallax
+        div.img-shadow
+          img(src="img/collab2.jpg", du-parallax y="background")
+      .hero.features
+        .container
+          .col
+            h2 Type
+            p Lorem ipsum
+          .col
+            h2 Draw
+            p Lorem ipsum
+          .col.end
+            h2 Save
+            p Lordem ipsum
+      .hero.parallax
+        div.img-shadow
+          img(src="img/collab1.jpg", du-parallax y="background")
+      .hero.supported
+        .container
+          h1 Supported Devices
+          .col.ios
+            img(src="img/ios7.png")
+          .col
+            img(src="img/android.png")
+          .col
+            img(src="img/html5.png")
+      .hero.footer
+        .container
+          .foot
+            span ALL RIGHTS RESERVED
+            br
+            span Application by Robert Nguyen, Fahad Nathani, David Mao, Yoshnee Raveendran, Daniel Daskolov
+
+          
