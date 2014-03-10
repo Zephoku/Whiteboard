@@ -78,7 +78,7 @@ $( document ).ready( function() {
   });
 
   $('#erase').click(function(){
-  	functErase(canvas, stackErase);
+    functErase(canvas, stackErase);
   });
 
   $('#default-view').click(function(){
@@ -109,7 +109,6 @@ $( document ).ready( function() {
     zoomMode(canvas);
   })
 
-
   // Pen size and color
   // Pulled from http://fabricjs.com/freedrawing/
   var drawingLineWidthE1 = document.getElementById("drawing-line-width");
@@ -130,18 +129,50 @@ $( document ).ready( function() {
     canvas.freeDrawingBrush.width = parseInt(drawingLineWidthE1.value, 10) || 1;
   }
 
-  // Text (basic)
-  $('#add-text').click(function(){
-    var inputText = document.getElementById("input-text").value;
-    // console.log(inputText);
+  // Text
+  // Font size is default = 40
+  var textSize_input = document.getElementById("text-size");
+  var textSize = textSize_input.value;
 
+  textSize_input.onchange = function() {
+    textSize = this.value;
+    this.previousSibling.previousSibling.innerHTML = this.value;
+  }
+
+  $('#add-text').click(function(){
+
+    // Check font color
+    var textColor = document.getElementById("text-color").value;
+
+    // Check to see if font should be Bolded, Italicized, or Underlined
+    var textBold = 'normal';
+    if (document.getElementById("bold_text").checked) {
+      textBold = 'bold';
+    }
+    var textItalicize = '';
+    if (document.getElementById("italic_text").checked) {
+      textItalicize = "italic";
+    }
+    var textUnderline = '';
+    if (document.getElementById("underline_text").checked) {
+      textUnderline = 'underline';
+    }
+
+    var inputText = document.getElementById("input-text").value;
     canvas.add(new fabric.Text(inputText, { 
+      fontSize: textSize,
+      fill: textColor,
+      fontWeight: textBold,
+      fontStyle: textItalicize,
+      textDecoration: textUnderline,
       left: 100, 
       top: 100 
     }));
     canvas.renderAll();
     updateFirebase(Whiteboard.firebase, canvas);
 
+    // Clear Text input for future use
+    document.getElementById("input-text").value = '';
   });
 
 
@@ -529,8 +560,8 @@ function getURLParameter(sParam)
 //erase functionality implementation 
 function functErase(canvas, stackErase)
 {
-	canvas.isDrawingMode = false;
-	canvas.selection = true;
+  canvas.isDrawingMode = false;
+  canvas.selection = true;
 
   //if multiple objects are selected before the erase button is clicked, then we want to erase those objects
   var multObj = canvas.getActiveGroup();
@@ -565,9 +596,9 @@ function functErase(canvas, stackErase)
   }
 
   //if no object is selected prior to hitting the erase button, then delete what user clicks an object
-	canvas.on('object:selected', function(options) {
-		if(options.target)
-		{
+  canvas.on('object:selected', function(options) {
+    if(options.target)
+    {
       var toRemove = canvas.getActiveObject();
       
       if(toRemove)
@@ -577,10 +608,10 @@ function functErase(canvas, stackErase)
         stackErase.push(oneObjToPush);
       }
 
-			canvas.remove(canvas.getActiveObject());
+      canvas.remove(canvas.getActiveObject());
       canvas.renderAll();
-		}
-	});
+    }
+  });
 }
 
 //undo-erase functionality implementation 
@@ -604,4 +635,16 @@ function updateOnEvent(eventName, firebase, canvas) {
   canvas.on(eventName, function() {
     updateFirebase(firebase, canvas);
   });
+}
+
+function selectFun() {
+
+  var canvas = Whiteboard.canvas;
+  canvas.isDrawingMode = false;
+}
+
+function drawFun() {
+
+  var canvas = Whiteboard.canvas;
+  canvas.isDrawingMode = true;
 }
