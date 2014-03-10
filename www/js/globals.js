@@ -8,5 +8,9 @@ var Whiteboard = {
   canvasScale: 1,
 
   xOffset: 0,
-  yOffset: 0
+  yOffset: 0,
+  hammertime: null,
+
+  zoomMode: false
+
 };

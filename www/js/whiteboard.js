@@ -49,6 +49,7 @@ $( document ).ready( function() {
     Whiteboard.firebase.on('value', function(snapshot) {
       updateCanvas(snapshot, canvas);
     });
+
   });
 
   //set handle for clear-canvas button
@@ -67,10 +68,12 @@ $( document ).ready( function() {
   });
 
   $('#select-on').click(function(){
+    Whiteboard.zoomMode= false;
     selectFun(canvas);
   });
 
   $('#draw-on').click(function(){
+    Whiteboard.zoomMode = false;
     drawFun(canvas);
   });
 
@@ -101,6 +104,11 @@ $( document ).ready( function() {
   $('#undo').click(function(){
     functUndo(canvas, stackErase);
   })
+
+  $('#zoom-mode').click(function(){
+    zoomMode(canvas);
+  })
+
 
   // Pen size and color
   // Pulled from http://fabricjs.com/freedrawing/
@@ -137,12 +145,56 @@ $( document ).ready( function() {
   });
 
 
-/*
-  $('#back-to-zoom').click(function(){
-    backToZoom(canvas);
-  });
-*/
 });
+
+
+function initializeHammer(canvas) {
+  var zoomwrapper = document.getElementById("zoomwrapper");
+
+    Hammer(zoomwrapper).on("dragright", function() {
+        if(Whiteboard.zoomMode) panTouch(canvas, 5, 0);
+    });
+
+    Hammer(zoomwrapper).on("dragleft", function() {
+        if(Whiteboard.zoomMode) panTouch(canvas, -5, 0);
+    });
+
+    Hammer(zoomwrapper).on("dragdown", function() {
+        if(Whiteboard.zoomMode) panTouch(canvas, 0, 5);
+    });
+
+    Hammer(zoomwrapper).on("dragup", function() {
+        if(Whiteboard.zoomMode) panTouch(canvas, 0, -5);
+    });
+
+    Hammer(zoomwrapper).on("pinchin", function() {
+       if(Whiteboard.zoomMode) pinchZoomIn(canvas, .98);
+       console.log("pinch in");
+    });
+
+    Hammer(zoomwrapper).on("pinchout", function() {
+        if(Whiteboard.zoomMode) pinchZoomOut(canvas, .98);
+        console.log("pinch out");
+    });
+
+}
+
+function zoomMode(canvas) {
+  Whiteboard.zoomMode = true;
+  canvas.isDrawingMode = false;
+  canvas.selection = false;
+  var objects = canvas.getObjects();
+
+  canvas.forEachObject(function(o) {
+    o.selectable = false;
+  });
+
+  canvas.off('object:selected');
+
+  initializeHammer(canvas);
+
+}
+
 
 function initCanvas(firebase, canvas) {
   firebase.once('value', function(data) {
@@ -182,6 +234,35 @@ function clear(canvas){
   canvas.clear();
 }
 
+function pinchZoomOut(canvas, factor) {
+  var objects = canvas.getObjects();
+      for (var i in objects) {
+          var scaleX = objects[i].scaleX;
+          var scaleY = objects[i].scaleY;
+          var left = objects[i].left;
+          var top = objects[i].top;
+          
+          var tempScaleX = scaleX * factor;
+          var tempScaleY = scaleY * factor;
+          var tempLeft = left * factor;
+          var tempTop = top * factor;
+          
+          objects[i].scaleX = tempScaleX;
+          objects[i].scaleY = tempScaleY;
+          objects[i].left = tempLeft;
+          objects[i].top = tempTop;
+          
+          objects[i].setCoords();
+      }
+
+  canvas.renderAll();
+  Whiteboard.canvasScale *= factor;
+}
+
+
+
+
+
 function zoomOut(canvas) {
   var objects = canvas.getObjects();
       for (var i in objects) {
@@ -206,6 +287,33 @@ function zoomOut(canvas) {
   canvas.renderAll();
   Whiteboard.canvasScale *= Whiteboard.SCALE_FACTOR;
 }
+
+function pinchZoomIn(canvas, factor) {
+var objects = canvas.getObjects();
+      for (var i in objects) {
+          var scaleX = objects[i].scaleX;
+          var scaleY = objects[i].scaleY;
+          var left = objects[i].left;
+          var top = objects[i].top;
+          
+          var tempScaleX = scaleX / factor;
+          var tempScaleY = scaleY / factor;
+          var tempLeft = left / factor;
+          var tempTop = top / factor;
+          
+          objects[i].scaleX = tempScaleX;
+          objects[i].scaleY = tempScaleY;
+          objects[i].left = tempLeft;
+          objects[i].top = tempTop;
+          
+          objects[i].setCoords();
+      }
+
+  canvas.renderAll();
+  Whiteboard.canvasScale /= factor;
+
+}
+
 
 function zoomIn(canvas) {
 var objects = canvas.getObjects();
@@ -315,6 +423,34 @@ function backToZoom(canvas) {
     canvas.renderAll();
 }
 
+function panTouch(canvas, xOffset, yOffset) {
+  var objects = canvas.getObjects();
+
+ // xOffset /= Whiteboard.canvasScale;
+  //yOffset /= Whiteboard.canvasScale;
+
+  for (var i in objects) {
+  
+      var left = objects[i].left;
+      var top = objects[i].top;
+  
+      var tempLeft = left + xOffset;
+      var tempTop = top + yOffset;
+
+      objects[i].left = tempLeft;
+      objects[i].top = tempTop;
+
+      objects[i].setCoords();
+  }
+
+    canvas.renderAll();
+    Whiteboard.xOffset += xOffset;
+    Whiteboard.yOffset += yOffset;
+
+}
+
+
+
 function pan(canvas, dir) {
   var objects = canvas.getObjects();
 
@@ -364,6 +500,10 @@ function selectFun(canvas) {
   canvas.isDrawingMode = false;
 
   canvas.off('object:selected');
+
+  canvas.forEachObject(function(o) {
+    o.selectable = true;
+  });
 
 }
 

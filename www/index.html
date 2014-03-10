@@ -37,6 +37,10 @@
         <script type="text/javascript" src="js/whiteboard.js"></script>
         <script type="text/javascript" src="js/whiteboard-angular.js"></script>
 
+        <script type="text/javascript" src="js/hammer.js"></script>
+        <script type="text/javascript" src"js/jquery.hammer.js"></script>
+        <script type="text/javascript" src"js/modernizr.js"></script>
+
         <title>Whiteboard</title>
     </head>
     <body>
@@ -47,8 +51,12 @@
         <div class="title-container">
             <span id="title"></span>
         </div>
-        <div id="whiteboard-container" ng-app="whiteboardApp" ng-controller="whiteboardCtrl">
-            <canvas id="whiteboard" width="{{canvasWidth}}" height="{{canvasHeight}}"></canvas>
+        <div id="zoomwrapper">
+            <div class="drag drag1">
+                <div id="whiteboard-container" ng-app="whiteboardApp" ng-controller="whiteboardCtrl">
+                    <canvas id="whiteboard" width="{{canvasWidth}}" height="{{canvasHeight}}"></canvas>
+                 </div>
+            </div>
         </div>
 
         <div class="btn-container">
@@ -64,6 +72,7 @@
             <button id="pan-up">Up</button>
             <button id="pan-left">Left</button>
             <button id="pan-right">Right</button>
+            <button id="zoom-mode">Zoom Mode</button>
             <input id="sessionId" type="text" placeholder="Session ID">
             <input id="sessionSubmit" type="submit">
             <!-- For pen -->
