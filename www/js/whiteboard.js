@@ -189,7 +189,7 @@ function zoomMode(canvas) {
     o.selectable = false;
   });
 
-  canvas.off('object:selected');
+  //canvas.off('object:selected');
 
   initializeHammer(canvas);
 
