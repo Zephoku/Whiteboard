@@ -141,6 +141,10 @@ $( document ).ready( function() {
 
   $('#add-text').click(function(){
 
+    // Get font
+    var font_menu = document.getElementById("font_name");
+    var font = font_menu.options[font_menu.selectedIndex].text;
+
     // Check font color
     var textColor = document.getElementById("text-color").value;
 
@@ -165,6 +169,7 @@ $( document ).ready( function() {
       fontWeight: textBold,
       fontStyle: textItalicize,
       textDecoration: textUnderline,
+      fontFamily: font,
       left: 100, 
       top: 100 
     }));
@@ -174,8 +179,6 @@ $( document ).ready( function() {
     // Clear Text input for future use
     document.getElementById("input-text").value = '';
   });
-
-
 });
 
 

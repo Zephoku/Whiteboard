@@ -83,6 +83,11 @@
             <input type="color" value="#000" id="drawing-color">
             <!-- For text -->
             <input id="input-text" type="text" placeholder="Place text here">
+            <select name="font_name" id="font_name" form="font_form">
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Helvetica">Helvetica</option>
+                <option value="Courier New">Courier New</option>
+            </select>
             <span class="info" style="color:white">Text Size: </span>
             <span class="info" style="color:white">40</span>
             <input type="range" value="40" min="10" max="100" id="text-size">
@@ -94,7 +99,6 @@
             <label for="italic_text" style="color:white">I</label>
             <input type="checkbox" id="underline_text">
             <label for="underline_text" style="color:white">U</label>
-
             <button id="add-text">Add Text</button>
         </div>
     </div>
