@@ -1,6 +1,7 @@
 extends layout
 
 block links
+  link(rel='stylesheet', href='/css/normalize.css')
   link(rel='stylesheet', href='/css/main.css')
 
 block scripts
@@ -45,13 +46,13 @@ block content
         .container
           .col
             h2 Type
-            p Lorem ipsum
+            img(src="img/type.png")
           .col
             h2 Draw
-            p Lorem ipsum
+            img(src="img/draw.png")
           .col.end
             h2 Save
-            p Lordem ipsum
+            img(src="img/draw.png")
       .hero.parallax
         div.img-shadow
           img(src="img/collab1.jpg", du-parallax y="background")

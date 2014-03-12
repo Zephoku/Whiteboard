@@ -484,6 +484,8 @@ dl {
     width: 100%; }
     .hero.features .container h1:last-child {
       margin-right: 0; }
+  .hero.features .container h2 {
+    margin-bottom: 20px; }
   .hero.features .container .col {
     padding-top: 60px;
     float: left;
