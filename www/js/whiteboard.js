@@ -107,37 +107,21 @@ $( document ).ready( function() {
 
   $('#zoom-mode').click(function(){
     zoomMode(canvas);
-  })
+  });
 
   // Pen size and color
   // Pulled from http://fabricjs.com/freedrawing/
   var drawingLineWidthE1 = document.getElementById("drawing-line-width");
   var drawingColorE1 = document.getElementById("drawing-color");
 
-  drawingLineWidthE1.onchange = function() {
-    canvas.freeDrawingBrush.width = parseInt(this.value, 10) || 1;
-    this.previousSibling.previousSibling.innerHTML = this.value;
-  }
-
-  drawingColorE1.onchange = function() {
-    canvas.freeDrawingBrush.color = this.value;
-  }
 
   // Set defaults for pen size and color
   if (canvas.freeDrawingBrush) {
-    canvas.freeDrawingBrush.color = drawingColorE1.value;
-    canvas.freeDrawingBrush.width = parseInt(drawingLineWidthE1.value, 10) || 1;
   }
 
   // Text
   // Font size is default = 40
   var textSize_input = document.getElementById("text-size");
-  var textSize = textSize_input.value;
-
-  textSize_input.onchange = function() {
-    textSize = this.value;
-    this.previousSibling.previousSibling.innerHTML = this.value;
-  }
 
   $('#add-text').click(function(){
 
