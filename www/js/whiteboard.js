@@ -109,6 +109,10 @@ $( document ).ready( function() {
     zoomMode(canvas);
   })
 
+  $('#img-download').click(function(){
+    imgDownload(canvas);
+  })
+
   // Pen size and color
   // Pulled from http://fabricjs.com/freedrawing/
   var drawingLineWidthE1 = document.getElementById("drawing-line-width");
@@ -234,6 +238,7 @@ function initCanvas(firebase, canvas) {
   firebase.once('value', function(data) {
     canvas.loadFromJSON(data.val());
     backToZoom(canvas);
+    //canvas.setBackgroundColor('rgba(255,255,255,1.0)', canvas.renderAll());
     canvas.renderAll();
   });
 }
@@ -640,14 +645,26 @@ function updateOnEvent(eventName, firebase, canvas) {
   });
 }
 
+// Sets the canvas in select mode
 function selectFun() {
-
   var canvas = Whiteboard.canvas;
   canvas.isDrawingMode = false;
 }
 
+// Sets the canvas in drawing mode
 function drawFun() {
-
   var canvas = Whiteboard.canvas;
   canvas.isDrawingMode = true;
+}
+
+// Takes a snapshot of the current canvas and begins download as a jpeg image
+function imgDownload(canvas) {
+  defaultView(canvas);
+  var url = canvas.toDataURL({
+    format: 'jpeg',
+    multiplier: 1
+  });
+  var name = 'whiteboard.jpeg';
+  $('<a>').attr({href:url, download:name})[0].click();
+  //backToZoom(canvas);
 }
