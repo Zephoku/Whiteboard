@@ -23,35 +23,89 @@
         <meta name="format-detection" content="telephone=no" />
         <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <link rel="stylesheet" type="text/css" href="css/reset.css" />
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
         <link rel="stylesheet" type="text/css" href="css/whiteboard.css" />
-        <link rel="stylesheet" type="text/css" href="css/index.css" />
+        <script type="text/javascript" src="js/jquery.js"></script>
         <script type="text/javascript" src="js/angular.js"></script>
+        <script type="text/javascript" src="js/fabric.js"></script>
+        <script type="text/javascript" src="js/bootstrap.js"></script>
         <script type='text/javascript' src='https://cdn.firebase.com/js/client/1.0.6/firebase.js'></script>
         <script type="text/javascript" src='https://cdn.firebase.com/libs/angularfire/0.6.0/angularfire.min.js'></script>
         <script type="text/javascript" src='https://cdn.firebase.com/js/simple-login/1.2.3/firebase-simple-login.js'></script>
-        <script type="text/javascript" src="js/jquery.js"></script>
-        <script type="text/javascript" src="js/fabric.js"></script>
         <script type="text/javascript" src="js/globals.js"></script>
         <script type="text/javascript" src="js/whiteboard.js"></script>
         <script type="text/javascript" src="js/whiteboard-angular.js"></script>
+
+        <script type="text/javascript" src="js/hammer.js"></script>
+        <script type="text/javascript" src"js/jquery.hammer.js"></script>
+        <script type="text/javascript" src"js/modernizr.js"></script>
 
         <title>Whiteboard</title>
     </head>
     <body>
 
-    <div id="whiteboard-container" ng-app="whiteboardApp" ng-controller="whiteboardCtrl">
-      <canvas id="whiteboard" width="{{canvasWidth}}" height="{{canvasHeight}}"><canvas>
+    <div ng-app="whiteboardApp" class="whiteboard-app">
+      <div class="title-container"><span id="title"></span></div>
+      <div id="zoomwrapper">
+        <div class="drag drag1">
+          <div id="whiteboard-container" ng-controller="whiteboardCtrl">
+            <canvas id="whiteboard" width="{{canvasWidth}}" height="{{canvasHeight}}"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="btn-container row">
+        <div class="modes col-md-2">
+          <h5 class="title">Mode</h5>
+          <button id="select-on" class="btn btn-default">Select</button>
+          <button id="draw-on" class="btn btn-default"> Draw</button>
+          <button id="zoom-mode" class="btn btn-default"> Zoom</button>
+        </div>
+        <div class="board col-md-3">
+          <h5 class="title">Board</h5>
+          <button id="clear-canvas" class="btn btn-default"> Clear</button>
+          <button id="erase" class="btn btn-default"> Erase</button>
+          <button id="undo" class="btn btn-default"> Undo Erase</button>
+          <input id="sessionId" type="text" placeholder="Session ID" class="form-control">
+          <input id="sessionSubmit" type="submit" class="btn btn-default">
+        </div>
+        <div class="view col-md-2">
+          <h5 class="title">View</h5>
+          <button id="zoom-in" class="btn btn-default">Zoom In</button>
+          <button id="zoom-out" class="btn btn-default">Zoom Out</button>
+          <button id="default-view" class="btn btn-default">100%</button>
+          <button id="pan-up" class="btn btn-default">Up</button>
+          <button id="pan-down" class="btn btn-default">Down</button>
+          <button id="pan-left" class="btn btn-default">Left</button>
+          <button id="pan-right" class="btn btn-default">Right</button>
+        </div>
+        <div class="pen col-md-2">
+          <h5 class="title">Pen</h5><span class="info">Pen Size: </span><span class="info">5</span>
+          <input id="drawing-line-width" type="range" value="5" min="1" max="150"><span class="info">Pen Color:</span>
+          <input id="drawing-color" type="color" value="#000">
+        </div>
+        <div class="text col-md-3">
+          <h5 class="title">Text</h5>
+          <input id="input-text" type="text" placeholder="Place text here" class="form-control">
+          <button id="add-text" class="btn btn-default">Add Text</button>
+          <select id="font_name" name="font_name" form="font_name" class="form-control">
+            <option value="Times New Roman">Times New Roman</option>
+            <option value="Helvetica">Helvetica</option>
+            <option value="Courier New">Courier New</option>
+          </select><span class="info">Text Size:</span><span class="info">40</span>
+          <input id="text-size" type="range" value="40" min="10" max="100"><span class="info">Text Color:</span>
+          <input id="text-color" type="color" value="#000">
+          <label for="bold_text" class="info">B
+            <input id="bold_text" type="checkbox" value="off">
+          </label>
+          <label for="italic_text" class="info">I
+            <input id="italic_text" type="checkbox" value="off">
+          </label>
+          <label for="underline_text" class="info">U
+            <input id="underline_text" type="checkbox" value="off">
+          </label>
+        </div>
+      </div>
     </div>
-    
-    <div class="btn-container">
-	<button id="select-canvas" onclick="selectFun()">Select</button>
-	<button id="draw-canvas" onclick="drawFun()">Draw</button>
-        <button id="clear-canvas" onclick="clearFun()">Clear</button>
-        <button id="zoom-in-canvas" onclick="zoomOutFun()">Zoom Out</button>
-        <button id="zoom-in-canvas" onclick="zoomInFun()">Zoom In</button>
-        <button id="zoom-in-canvas" onclick="resetZoomToDefault()">Default View</button>
-        <button id="zoom-in-canvas" onclick="resetDefaultToZoom()">Restore Zoom</button>
-    </div>
-    
     </body>
-</html>
+    </html>
