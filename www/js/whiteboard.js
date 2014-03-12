@@ -49,6 +49,7 @@ $( document ).ready( function() {
     Whiteboard.firebase.on('value', function(snapshot) {
       updateCanvas(snapshot, canvas);
     });
+
   });
 
   //set handle for clear-canvas button
@@ -67,15 +68,17 @@ $( document ).ready( function() {
   });
 
   $('#select-on').click(function(){
+    Whiteboard.zoomMode= false;
     selectFun(canvas);
   });
 
   $('#draw-on').click(function(){
+    Whiteboard.zoomMode = false;
     drawFun(canvas);
   });
 
   $('#erase').click(function(){
-  	functErase(canvas, stackErase);
+    functErase(canvas, stackErase);
   });
 
   $('#default-view').click(function(){
@@ -102,47 +105,114 @@ $( document ).ready( function() {
     functUndo(canvas, stackErase);
   })
 
+  $('#zoom-mode').click(function(){
+    zoomMode(canvas);
+  });
+
   // Pen size and color
   // Pulled from http://fabricjs.com/freedrawing/
   var drawingLineWidthE1 = document.getElementById("drawing-line-width");
   var drawingColorE1 = document.getElementById("drawing-color");
 
-  drawingLineWidthE1.onchange = function() {
-    canvas.freeDrawingBrush.width = parseInt(this.value, 10) || 1;
-    this.previousSibling.previousSibling.innerHTML = this.value;
-  }
-
-  drawingColorE1.onchange = function() {
-    canvas.freeDrawingBrush.color = this.value;
-  }
 
   // Set defaults for pen size and color
   if (canvas.freeDrawingBrush) {
-    canvas.freeDrawingBrush.color = drawingColorE1.value;
-    canvas.freeDrawingBrush.width = parseInt(drawingLineWidthE1.value, 10) || 1;
   }
 
-  // Text (basic)
-  $('#add-text').click(function(){
-    var inputText = document.getElementById("input-text").value;
-    // console.log(inputText);
+  // Text
+  // Font size is default = 40
+  var textSize_input = document.getElementById("text-size");
 
+  $('#add-text').click(function(){
+
+    // Get font
+    var font_menu = document.getElementById("font_name");
+    var font = font_menu.options[font_menu.selectedIndex].text;
+
+    // Check font color
+    var textColor = document.getElementById("text-color").value;
+
+    // Check to see if font should be Bolded, Italicized, or Underlined
+    var textBold = 'normal';
+    if (document.getElementById("bold_text").checked) {
+      textBold = 'bold';
+    }
+    var textItalicize = '';
+    if (document.getElementById("italic_text").checked) {
+      textItalicize = "italic";
+    }
+    var textUnderline = '';
+    if (document.getElementById("underline_text").checked) {
+      textUnderline = 'underline';
+    }
+
+    var inputText = document.getElementById("input-text").value;
     canvas.add(new fabric.Text(inputText, { 
+      fontSize: textSize,
+      fill: textColor,
+      fontWeight: textBold,
+      fontStyle: textItalicize,
+      textDecoration: textUnderline,
+      fontFamily: font,
       left: 100, 
       top: 100 
     }));
     canvas.renderAll();
     updateFirebase(Whiteboard.firebase, canvas);
 
+    // Clear Text input for future use
+    document.getElementById("input-text").value = '';
   });
-
-
-/*
-  $('#back-to-zoom').click(function(){
-    backToZoom(canvas);
-  });
-*/
 });
+
+
+function initializeHammer(canvas) {
+  var zoomwrapper = document.getElementById("zoomwrapper");
+
+    Hammer(zoomwrapper).on("dragright", function() {
+        if(Whiteboard.zoomMode) panTouch(canvas, 5, 0);
+    });
+
+    Hammer(zoomwrapper).on("dragleft", function() {
+        if(Whiteboard.zoomMode) panTouch(canvas, -5, 0);
+    });
+
+    Hammer(zoomwrapper).on("dragdown", function() {
+        if(Whiteboard.zoomMode) panTouch(canvas, 0, 5);
+    });
+
+    Hammer(zoomwrapper).on("dragup", function() {
+        if(Whiteboard.zoomMode) panTouch(canvas, 0, -5);
+    });
+
+    Hammer(zoomwrapper).on("pinchin", function() {
+       if(Whiteboard.zoomMode) pinchZoomIn(canvas, .98);
+       console.log("pinch in");
+    });
+
+    Hammer(zoomwrapper).on("pinchout", function() {
+        if(Whiteboard.zoomMode) pinchZoomOut(canvas, .98);
+        console.log("pinch out");
+    });
+
+}
+
+function zoomMode(canvas) {
+  Whiteboard.zoomMode = true;
+  canvas.isDrawingMode = false;
+  canvas.selection = false;
+  var objects = canvas.getObjects();
+
+  canvas.forEachObject(function(o) {
+    o.selectable = false;
+  });
+
+  //canvas.off('object:selected');
+
+  initializeHammer(canvas);
+
+}
+
 
 function initCanvas(firebase, canvas) {
   firebase.once('value', function(data) {
@@ -182,6 +252,35 @@ function clear(canvas){
   canvas.clear();
 }
 
+function pinchZoomOut(canvas, factor) {
+  var objects = canvas.getObjects();
+      for (var i in objects) {
+          var scaleX = objects[i].scaleX;
+          var scaleY = objects[i].scaleY;
+          var left = objects[i].left;
+          var top = objects[i].top;
+          
+          var tempScaleX = scaleX * factor;
+          var tempScaleY = scaleY * factor;
+          var tempLeft = left * factor;
+          var tempTop = top * factor;
+          
+          objects[i].scaleX = tempScaleX;
+          objects[i].scaleY = tempScaleY;
+          objects[i].left = tempLeft;
+          objects[i].top = tempTop;
+          
+          objects[i].setCoords();
+      }
+
+  canvas.renderAll();
+  Whiteboard.canvasScale *= factor;
+}
+
+
+
+
+
 function zoomOut(canvas) {
   var objects = canvas.getObjects();
       for (var i in objects) {
@@ -206,6 +305,33 @@ function zoomOut(canvas) {
   canvas.renderAll();
   Whiteboard.canvasScale *= Whiteboard.SCALE_FACTOR;
 }
+
+function pinchZoomIn(canvas, factor) {
+var objects = canvas.getObjects();
+      for (var i in objects) {
+          var scaleX = objects[i].scaleX;
+          var scaleY = objects[i].scaleY;
+          var left = objects[i].left;
+          var top = objects[i].top;
+          
+          var tempScaleX = scaleX / factor;
+          var tempScaleY = scaleY / factor;
+          var tempLeft = left / factor;
+          var tempTop = top / factor;
+          
+          objects[i].scaleX = tempScaleX;
+          objects[i].scaleY = tempScaleY;
+          objects[i].left = tempLeft;
+          objects[i].top = tempTop;
+          
+          objects[i].setCoords();
+      }
+
+  canvas.renderAll();
+  Whiteboard.canvasScale /= factor;
+
+}
+
 
 function zoomIn(canvas) {
 var objects = canvas.getObjects();
@@ -315,6 +441,34 @@ function backToZoom(canvas) {
     canvas.renderAll();
 }
 
+function panTouch(canvas, xOffset, yOffset) {
+  var objects = canvas.getObjects();
+
+ // xOffset /= Whiteboard.canvasScale;
+  //yOffset /= Whiteboard.canvasScale;
+
+  for (var i in objects) {
+  
+      var left = objects[i].left;
+      var top = objects[i].top;
+  
+      var tempLeft = left + xOffset;
+      var tempTop = top + yOffset;
+
+      objects[i].left = tempLeft;
+      objects[i].top = tempTop;
+
+      objects[i].setCoords();
+  }
+
+    canvas.renderAll();
+    Whiteboard.xOffset += xOffset;
+    Whiteboard.yOffset += yOffset;
+
+}
+
+
+
 function pan(canvas, dir) {
   var objects = canvas.getObjects();
 
@@ -365,6 +519,10 @@ function selectFun(canvas) {
 
   canvas.off('object:selected');
 
+  canvas.forEachObject(function(o) {
+    o.selectable = true;
+  });
+
 }
 
 function drawFun(canvas) {
@@ -389,8 +547,8 @@ function getURLParameter(sParam)
 //erase functionality implementation 
 function functErase(canvas, stackErase)
 {
-	canvas.isDrawingMode = false;
-	canvas.selection = true;
+  canvas.isDrawingMode = false;
+  canvas.selection = true;
 
   //if multiple objects are selected before the erase button is clicked, then we want to erase those objects
   var multObj = canvas.getActiveGroup();
@@ -425,9 +583,9 @@ function functErase(canvas, stackErase)
   }
 
   //if no object is selected prior to hitting the erase button, then delete what user clicks an object
-	canvas.on('object:selected', function(options) {
-		if(options.target)
-		{
+  canvas.on('object:selected', function(options) {
+    if(options.target)
+    {
       var toRemove = canvas.getActiveObject();
       
       if(toRemove)
@@ -437,10 +595,10 @@ function functErase(canvas, stackErase)
         stackErase.push(oneObjToPush);
       }
 
-			canvas.remove(canvas.getActiveObject());
+      canvas.remove(canvas.getActiveObject());
       canvas.renderAll();
-		}
-	});
+    }
+  });
 }
 
 //undo-erase functionality implementation 
@@ -464,4 +622,16 @@ function updateOnEvent(eventName, firebase, canvas) {
   canvas.on(eventName, function() {
     updateFirebase(firebase, canvas);
   });
+}
+
+function selectFun() {
+
+  var canvas = Whiteboard.canvas;
+  canvas.isDrawingMode = false;
+}
+
+function drawFun() {
+
+  var canvas = Whiteboard.canvas;
+  canvas.isDrawingMode = true;
 }
