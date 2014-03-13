@@ -659,10 +659,30 @@ function drawFun() {
 
 // Takes a snapshot of the current canvas and begins download as a jpeg image
 function imgDownload(canvas) {
-  defaultView(canvas);
+  //defaultView(canvas);
+  var height = 0;
+  var width = 0;
+  var objects = canvas.getObjects();
+
+  for (var i in objects) {
+    var objRight = objects[i].getLeft() + objects[i].getWidth();
+    var objBottom = objects[i].getTop() + objects[i].getHeight();
+
+    if (objRight > width) {
+      width = objRight;
+    }
+    if (objBottom > height) {
+      height = objBottom;
+    }
+  }
+
   var url = canvas.toDataURL({
     format: 'jpeg',
-    multiplier: 1
+    multiplier: 1,
+    left: 0,
+    right: 0,
+    width: width,
+    height: height
   });
   var name = 'whiteboard.jpeg';
   $('<a>').attr({href:url, download:name})[0].click();
