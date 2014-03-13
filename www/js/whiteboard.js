@@ -659,7 +659,6 @@ function drawFun() {
 
 // Takes a snapshot of the current canvas and begins download as a jpeg image
 function imgDownload(canvas) {
-  //defaultView(canvas);
   var height = 0;
   var width = 0;
   var objects = canvas.getObjects();
@@ -684,7 +683,6 @@ function imgDownload(canvas) {
     width: width,
     height: height
   });
-  var name = 'whiteboard.jpeg';
+  var name = Whiteboard.session + '.jpeg';
   $('<a>').attr({href:url, download:name})[0].click();
-  //backToZoom(canvas);
 }
