@@ -243,7 +243,7 @@ function initCanvas(firebase, canvas) {
 
 function updateCanvas(snapshot, canvas) {
     canvas.loadFromJSON(snapshot.val());
-    //backToZoom(canvas);
+    backToZoom(canvas);
     //if(Whiteboard.zoomFlag) {
     panTouchWithoutRender(canvas, Whiteboard.xOffset, Whiteboard.yOffset);
   
