@@ -69,11 +69,13 @@ $( document ).ready( function() {
 
   $('#select-on').click(function(){
     Whiteboard.zoomMode= false;
+    Whiteboard.zoomFlag = false;
     selectFun(canvas);
   });
 
   $('#draw-on').click(function(){
     Whiteboard.zoomMode = false;
+    Whiteboard.zoomFlag = false;
     drawFun(canvas);
   });
 
@@ -106,6 +108,7 @@ $( document ).ready( function() {
   })
 
   $('#zoom-mode').click(function(){
+    Whiteboard.zoomFlag = true;
     zoomMode(canvas);
   })
 
@@ -240,8 +243,12 @@ function initCanvas(firebase, canvas) {
 
 function updateCanvas(snapshot, canvas) {
     canvas.loadFromJSON(snapshot.val());
-    backToZoom(canvas);
+    //backToZoom(canvas);
+    //if(Whiteboard.zoomFlag) {
     panTouchWithoutRender(canvas, Whiteboard.xOffset, Whiteboard.yOffset);
+  
+     // Whiteboard.zoomFlag = false;
+ //  }
     canvas.renderAll();
 }
 
@@ -480,9 +487,9 @@ function panTouch(canvas, xOffset, yOffset) {
 
     Whiteboard.xOffset += xOffset;
     Whiteboard.yOffset += yOffset;
+    //Whiteboard.zoomFlag = true;
     //console.log("Current x & y offset: " + Whiteboard.xOffset + " " + Whiteboard.yOffset);
 }
-
 
 
 
@@ -658,12 +665,20 @@ function functUndo(canvas, stackErase)
     }
 }
 
+//called on mouse up
 function updateOnEvent(eventName, firebase, canvas) {
   canvas.on(eventName, function() {
-    panTouchWithoutRender(canvas, Whiteboard.xOffset * (-1), Whiteboard.yOffset*(-1));
-    updateFirebase(firebase, canvas);
-    panTouchWithoutRender(canvas, Whiteboard.xOffset, Whiteboard.yOffset);
-   // canvas.renderAll();
+    //panTouchWithoutRender(canvas, Whiteboard.xOffset * (-1), Whiteboard.yOffset*(-1));
+    console.log("Zoomflag: " + Whiteboard.zoomFlag);
+    if(!Whiteboard.zoomFlag){ 
+      panTouchWithoutRender(canvas, Whiteboard.xOffset * (-1), Whiteboard.yOffset*(-1));
+      updateFirebase(firebase, canvas);
+    }
+
+    //if(Whiteboard.zoomFlag) {
+    //  panTouchWithoutRender(canvas, Whiteboard.xOffset, Whiteboard.yOffset);
+    //}
+    //canvas.renderAll();
   });
 }
 
