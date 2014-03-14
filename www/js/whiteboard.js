@@ -688,31 +688,7 @@ function updateOnEvent(eventName, firebase, canvas) {
   });
 }
 
-<<<<<<< HEAD
-// function selectFun() {
 
-//   var canvas = Whiteboard.canvas;
-//   canvas.isDrawingMode = false;
-// }
-
-// function drawFun() {
-
-//   var canvas = Whiteboard.canvas;
-//   canvas.isDrawingMode = true;
-// }
-
-// function selectFun() {
-
-//   var canvas = Whiteboard.canvas;
-//   canvas.isDrawingMode = false;
-// }
-
-// function drawFun() {
-
-//   var canvas = Whiteboard.canvas;
-//   canvas.isDrawingMode = true;
-// }
-=======
 // Sets the canvas in select mode
 function selectFun() {
   var canvas = Whiteboard.canvas;
@@ -735,4 +711,5 @@ function imgDownload(canvas) {
   var name = Whiteboard.session + '.png';
   $('<a>').attr({href:url, download:name})[0].click();
 }
->>>>>>> d1ebdf6432e8161c63f7ab167662c341b8d99756
+
+
