@@ -11,6 +11,7 @@ var Whiteboard = {
   yOffset: 0,
   hammertime: null,
 
-  zoomMode: false
+  zoomMode: false,
+  zoomFlag: false
 
 };

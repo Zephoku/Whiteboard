@@ -69,11 +69,13 @@ $( document ).ready( function() {
 
   $('#select-on').click(function(){
     Whiteboard.zoomMode= false;
+    Whiteboard.zoomFlag = false;
     selectFun(canvas);
   });
 
   $('#draw-on').click(function(){
     Whiteboard.zoomMode = false;
+    Whiteboard.zoomFlag = false;
     drawFun(canvas);
   });
 
@@ -103,11 +105,16 @@ $( document ).ready( function() {
 
   $('#undo').click(function(){
     functUndo(canvas, stackErase);
-  })
+  });
 
   $('#zoom-mode').click(function(){
+    Whiteboard.zoomFlag = true;
     zoomMode(canvas);
-  })
+  });
+
+  $('#img-download').click(function(){
+    imgDownload(canvas);
+  });
 
   // Pen size and color
   // Pulled from http://fabricjs.com/freedrawing/
@@ -201,12 +208,12 @@ function initializeHammer(canvas) {
         if(Whiteboard.zoomMode) panTouch(canvas, 0, -5);
     });
 
-    Hammer(zoomwrapper).on("pinchin", function() {
+    Hammer(zoomwrapper).on("pinchout", function() {
        if(Whiteboard.zoomMode) pinchZoomIn(canvas, .98);
        console.log("pinch in");
     });
 
-    Hammer(zoomwrapper).on("pinchout", function() {
+    Hammer(zoomwrapper).on("pinchin", function() {
         if(Whiteboard.zoomMode) pinchZoomOut(canvas, .98);
         console.log("pinch out");
     });
@@ -241,6 +248,11 @@ function initCanvas(firebase, canvas) {
 function updateCanvas(snapshot, canvas) {
     canvas.loadFromJSON(snapshot.val());
     backToZoom(canvas);
+    //if(Whiteboard.zoomFlag) {
+    panTouchWithoutRender(canvas, Whiteboard.xOffset, Whiteboard.yOffset);
+  
+     // Whiteboard.zoomFlag = false;
+ //  }
     canvas.renderAll();
 }
 
@@ -260,7 +272,8 @@ function removePathFill(canvasData) {
 }
 
 function clearAndUpdate(firebase, canvas) {
-  canvas.clear(); 
+  canvas.clear();
+  canvas.setBackgroundColor('rgba(255,255,255,1.0)', canvas.renderAll()); 
   updateFirebase(firebase, canvas);
 }
 
@@ -292,8 +305,6 @@ function pinchZoomOut(canvas, factor) {
   canvas.renderAll();
   Whiteboard.canvasScale *= factor;
 }
-
-
 
 
 
@@ -478,9 +489,34 @@ function panTouch(canvas, xOffset, yOffset) {
   }
 
     canvas.renderAll();
+
     Whiteboard.xOffset += xOffset;
     Whiteboard.yOffset += yOffset;
+    //Whiteboard.zoomFlag = true;
+    //console.log("Current x & y offset: " + Whiteboard.xOffset + " " + Whiteboard.yOffset);
+}
 
+
+
+function panTouchWithoutRender(canvas, xOffset, yOffset) {
+  var objects = canvas.getObjects();
+
+ // xOffset /= Whiteboard.canvasScale;
+  //yOffset /= Whiteboard.canvasScale;
+
+  for (var i in objects) {
+  
+      var left = objects[i].left;
+      var top = objects[i].top;
+  
+      var tempLeft = left + xOffset;
+      var tempTop = top + yOffset;
+
+      objects[i].left = tempLeft;
+      objects[i].top = tempTop;
+
+      objects[i].setCoords();
+  }
 }
 
 
@@ -538,6 +574,7 @@ function selectFun(canvas) {
   canvas.forEachObject(function(o) {
     o.selectable = true;
   });
+
 
 }
 
@@ -634,32 +671,43 @@ function functUndo(canvas, stackErase)
     }
 }
 
+//called on mouse up
 function updateOnEvent(eventName, firebase, canvas) {
   canvas.on(eventName, function() {
-    updateFirebase(firebase, canvas);
+    //panTouchWithoutRender(canvas, Whiteboard.xOffset * (-1), Whiteboard.yOffset*(-1));
+    console.log("Zoomflag: " + Whiteboard.zoomFlag);
+    if(!Whiteboard.zoomFlag){ 
+      panTouchWithoutRender(canvas, Whiteboard.xOffset * (-1), Whiteboard.yOffset*(-1));
+      updateFirebase(firebase, canvas);
+    }
+
+    //if(Whiteboard.zoomFlag) {
+    //  panTouchWithoutRender(canvas, Whiteboard.xOffset, Whiteboard.yOffset);
+    //}
+    //canvas.renderAll();
   });
 }
 
-function selectFun() {
 
+// Sets the canvas in select mode
+function selectFun() {
   var canvas = Whiteboard.canvas;
   canvas.isDrawingMode = false;
 }
 
+// Sets the canvas in drawing mode
 function drawFun() {
-
   var canvas = Whiteboard.canvas;
   canvas.isDrawingMode = true;
 }
 
-function selectFun() {
+// Takes a snapshot of the current canvas and begins download as a png image
+function imgDownload(canvas) {
 
-  var canvas = Whiteboard.canvas;
-  canvas.isDrawingMode = false;
-}
-
-function drawFun() {
-
-  var canvas = Whiteboard.canvas;
-  canvas.isDrawingMode = true;
+  var url = canvas.toDataURL({
+    format: 'png',
+    multiplier: 1
+  });
+  var name = Whiteboard.session + '.png';
+  $('<a>').attr({href:url, download:name})[0].click();
 }
