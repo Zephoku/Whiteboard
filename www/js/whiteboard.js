@@ -1,7 +1,10 @@
 $( document ).ready( function() {
   // Initialize Drawing Canvas
-  Whiteboard.canvas = new fabric.Canvas('whiteboard');
+  Whiteboard.canvas = new fabric.Canvas('whiteboard', {
+    backgroundColor: '#ffffff'
+  });
   var canvas = Whiteboard.canvas;
+  canvas.renderAll();
   //yosh added:
   var stackErase = new Array();
   canvas.isDrawingMode = true;
@@ -273,7 +276,6 @@ function removePathFill(canvasData) {
 
 function clearAndUpdate(firebase, canvas) {
   canvas.clear();
-  canvas.setBackgroundColor('rgba(255,255,255,1.0)', canvas.renderAll()); 
   updateFirebase(firebase, canvas);
 }
 
