@@ -105,12 +105,16 @@ $( document ).ready( function() {
 
   $('#undo').click(function(){
     functUndo(canvas, stackErase);
-  })
+  });
 
   $('#zoom-mode').click(function(){
     Whiteboard.zoomFlag = true;
     zoomMode(canvas);
-  })
+  });
+
+  $('#img-download').click(function(){
+    imgDownload(canvas);
+  });
 
   // Pen size and color
   // Pulled from http://fabricjs.com/freedrawing/
@@ -268,7 +272,8 @@ function removePathFill(canvasData) {
 }
 
 function clearAndUpdate(firebase, canvas) {
-  canvas.clear(); 
+  canvas.clear();
+  canvas.setBackgroundColor('rgba(255,255,255,1.0)', canvas.renderAll()); 
   updateFirebase(firebase, canvas);
 }
 
@@ -683,6 +688,7 @@ function updateOnEvent(eventName, firebase, canvas) {
   });
 }
 
+<<<<<<< HEAD
 // function selectFun() {
 
 //   var canvas = Whiteboard.canvas;
@@ -706,3 +712,27 @@ function updateOnEvent(eventName, firebase, canvas) {
 //   var canvas = Whiteboard.canvas;
 //   canvas.isDrawingMode = true;
 // }
+=======
+// Sets the canvas in select mode
+function selectFun() {
+  var canvas = Whiteboard.canvas;
+  canvas.isDrawingMode = false;
+}
+
+// Sets the canvas in drawing mode
+function drawFun() {
+  var canvas = Whiteboard.canvas;
+  canvas.isDrawingMode = true;
+}
+
+// Takes a snapshot of the current canvas and begins download as a png image
+function imgDownload(canvas) {
+
+  var url = canvas.toDataURL({
+    format: 'png',
+    multiplier: 1
+  });
+  var name = Whiteboard.session + '.png';
+  $('<a>').attr({href:url, download:name})[0].click();
+}
+>>>>>>> d1ebdf6432e8161c63f7ab167662c341b8d99756
