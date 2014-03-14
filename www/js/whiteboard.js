@@ -103,15 +103,15 @@ $( document ).ready( function() {
 
   $('#undo').click(function(){
     functUndo(canvas, stackErase);
-  })
+  });
 
   $('#zoom-mode').click(function(){
     zoomMode(canvas);
-  })
+  });
 
   $('#img-download').click(function(){
     imgDownload(canvas);
-  })
+  });
 
   // Pen size and color
   // Pulled from http://fabricjs.com/freedrawing/
@@ -238,7 +238,6 @@ function initCanvas(firebase, canvas) {
   firebase.once('value', function(data) {
     canvas.loadFromJSON(data.val());
     backToZoom(canvas);
-    //canvas.setBackgroundColor('rgba(255,255,255,1.0)', canvas.renderAll());
     canvas.renderAll();
   });
 }
@@ -265,7 +264,8 @@ function removePathFill(canvasData) {
 }
 
 function clearAndUpdate(firebase, canvas) {
-  canvas.clear(); 
+  canvas.clear();
+  canvas.setBackgroundColor('rgba(255,255,255,1.0)', canvas.renderAll()); 
   updateFirebase(firebase, canvas);
 }
 
@@ -675,14 +675,17 @@ function imgDownload(canvas) {
     }
   }
 
+  //width += 50;
+  //height += 50;
+
   var url = canvas.toDataURL({
-    format: 'jpeg',
+    format: 'png',
     multiplier: 1,
     left: 0,
     right: 0,
     width: width,
     height: height
   });
-  var name = Whiteboard.session + '.jpeg';
+  var name = Whiteboard.session + '.png';
   $('<a>').attr({href:url, download:name})[0].click();
 }
