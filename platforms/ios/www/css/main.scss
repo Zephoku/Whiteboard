@@ -1,0 +1,270 @@
+@import "bourbon/bourbon";
+@import "bitters/bitters";
+@import "neat/neat";
+@import url(http://fonts.googleapis.com/css?family=Roboto:100,300);
+
+$wb-size: 10px;
+$wb-shadow-color: #222;
+
+body {
+}
+
+.whiteboard {
+  width: 100%;
+  background: url('/img/wall.png');
+}
+
+.top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 0;
+  width: 100%;
+  border-top: 10px solid #333333;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+  
+  box-shadow: 0 5px 4px -2px $wb-shadow-color;
+}
+
+.bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 0;
+  width: 100%;
+  border-bottom: 10px solid #000000;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+
+  box-shadow: 0 -5px 4px -2px $wb-shadow-color;
+}
+
+.left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0;
+  border-bottom: 10px solid transparent;
+	border-left: 10px solid #000000;
+	border-top: 10px solid transparent;
+
+  box-shadow: 0 -5px 4px 2px $wb-shadow-color;
+}
+
+.right {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 0;
+  border-bottom: 10px solid transparent;
+	border-right: 10px solid #333333;
+	border-top: 10px solid transparent;
+
+  box-shadow: 0 5px 4px 2px $wb-shadow-color;
+}
+
+.header {
+  @include outer-container;
+  padding-top: 200px;
+}
+
+.title, .subtitle {
+  @include span-columns(6);
+}
+.subtitle {
+  @include shift(3);
+}
+
+.title {
+  padding-bottom: 30px;
+  @include shift(3);
+}
+
+.register {
+  margin-top: 30px;
+  text-align: center;
+  @include span-columns(12);
+  font-size: 1.6rem;
+  a {
+    -webkit-border-radius: 10px 10px 10px 10px;
+    border-radius: 10px 10px 10px 10px;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, .2);
+  }
+}
+
+.content {
+  background-color: #ffffff;
+}
+
+.assets {
+  @include outer-container;
+  z-index: -1;
+  .line{
+    position: absolute;
+    top: 420px;
+    right: 880px;
+    width: 240px;
+  } 
+  .leaf {
+    position: absolute;
+    top: 580px;
+    right: 80px;
+    width: 260px;
+  }
+  .sun {
+    position: absolute;
+    top: 700px;
+    right: 500px;
+    width: 250px;
+
+  }
+}
+
+.dryerase, .redmarker{
+  position: absolute;
+  @include span-columns(3);
+}
+
+.dryerase {
+  bottom: 10px;
+  left: 50px;
+  width: 100px;
+}
+
+.redmarker {
+  bottom: 10px;
+  left: 180px;
+  width: 100px;
+}
+
+.container {
+  @include outer-container;
+  text-align: center;
+}
+.text {
+  @include span-columns(12);
+}
+
+.hero {
+  h1 {
+    padding-top: 80px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 100;
+    font-size: 2.6rem;
+  }
+  p {
+    padding-top: 20px;
+    font-size: 1.4rem;
+  }
+  color: #666666;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 100;
+  width: 100%;
+  height: 300px;
+
+}
+
+.parallax {
+  overflow: hidden;
+  img {
+    width: 100%;
+    min-width: 800px;
+    height: auto;
+    display: inline-block;
+  }
+  .shadow {
+  }
+}
+
+
+.hero.parallax {
+  height: 400px;
+  }
+
+.use {
+  @include span-columns(12);
+     
+}
+
+.end {
+  @include omega();
+}
+
+.img-shadow {
+  height: 400px;
+  position: relative;
+  max-width: 100%;
+  float: left;
+}
+.img-shadow::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  box-shadow: inset 0 0 8px rgba(0,0,0,.8);
+  -webkit-box-shadow: inset 0 0 8px rgba(0,0,0,.8);
+} 
+
+.img-shadow img {
+  float: left;
+} 
+
+.hero.features {
+  height: 500px;
+  .container {
+    h1 {
+      padding-top: 40px;
+      padding-bottom: 20px;
+      @include span-columns(12);
+    }
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    .col {
+      padding-top: 60px;
+      @include span-columns(4);
+    }
+  }
+
+}
+
+.hero.supported {
+  height: 400px;
+  h1 {
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+  .col {
+    @include span-columns(4);
+    img {
+      width: 200px;
+    }
+  }
+  .ios {
+    padding-top: 50px;
+  }
+}
+
+.hero.footer {
+  height: 140px;
+  background-color: #222222;
+  color: #ffffff;
+  font-size: 0.8rem;
+  .foot {
+    margin-top: 30px; 
+    @include span-columns(12);
+  }
+  .container {
+    text-align: left;
+  }
+}
+
+
