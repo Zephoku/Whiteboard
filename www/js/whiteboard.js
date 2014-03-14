@@ -15,7 +15,8 @@ $( document ).ready( function() {
     Whiteboard.session = sessionQuery;
     console.log(sessionQuery);
     Whiteboard.firebase = Whiteboard.firebase.root().child(Whiteboard.session);
-    clearFun();
+    //clearFun();
+    clear(canvas);
     initCanvas(Whiteboard.firebase, canvas);
   }
 
