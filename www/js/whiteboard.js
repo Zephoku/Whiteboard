@@ -657,34 +657,12 @@ function drawFun() {
   canvas.isDrawingMode = true;
 }
 
-// Takes a snapshot of the current canvas and begins download as a jpeg image
+// Takes a snapshot of the current canvas and begins download as a png image
 function imgDownload(canvas) {
-  var height = 0;
-  var width = 0;
-  var objects = canvas.getObjects();
-
-  for (var i in objects) {
-    var objRight = objects[i].getLeft() + objects[i].getWidth();
-    var objBottom = objects[i].getTop() + objects[i].getHeight();
-
-    if (objRight > width) {
-      width = objRight;
-    }
-    if (objBottom > height) {
-      height = objBottom;
-    }
-  }
-
-  //width += 50;
-  //height += 50;
 
   var url = canvas.toDataURL({
     format: 'png',
-    multiplier: 1,
-    left: 0,
-    right: 0,
-    width: width,
-    height: height
+    multiplier: 1
   });
   var name = Whiteboard.session + '.png';
   $('<a>').attr({href:url, download:name})[0].click();
