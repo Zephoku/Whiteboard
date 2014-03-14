@@ -693,7 +693,7 @@ function updateOnEvent(eventName, firebase, canvas) {
 
 
 // Sets the canvas in select mode
-function selectFun() {
+/*function selectFun() {
   var canvas = Whiteboard.canvas;
   canvas.isDrawingMode = false;
 }
@@ -702,7 +702,7 @@ function selectFun() {
 function drawFun() {
   var canvas = Whiteboard.canvas;
   canvas.isDrawingMode = true;
-}
+}*/
 
 // Takes a snapshot of the current canvas and begins download as a png image
 function imgDownload(canvas) {
