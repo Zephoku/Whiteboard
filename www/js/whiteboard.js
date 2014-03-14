@@ -204,12 +204,12 @@ function initializeHammer(canvas) {
         if(Whiteboard.zoomMode) panTouch(canvas, 0, -5);
     });
 
-    Hammer(zoomwrapper).on("pinchin", function() {
+    Hammer(zoomwrapper).on("pinchout", function() {
        if(Whiteboard.zoomMode) pinchZoomIn(canvas, .98);
        console.log("pinch in");
     });
 
-    Hammer(zoomwrapper).on("pinchout", function() {
+    Hammer(zoomwrapper).on("pinchin", function() {
         if(Whiteboard.zoomMode) pinchZoomOut(canvas, .98);
         console.log("pinch out");
     });
@@ -570,6 +570,7 @@ function selectFun(canvas) {
     o.selectable = true;
   });
 
+
 }
 
 function drawFun(canvas) {
@@ -682,26 +683,26 @@ function updateOnEvent(eventName, firebase, canvas) {
   });
 }
 
-function selectFun() {
+// function selectFun() {
 
-  var canvas = Whiteboard.canvas;
-  canvas.isDrawingMode = false;
-}
+//   var canvas = Whiteboard.canvas;
+//   canvas.isDrawingMode = false;
+// }
 
-function drawFun() {
+// function drawFun() {
 
-  var canvas = Whiteboard.canvas;
-  canvas.isDrawingMode = true;
-}
+//   var canvas = Whiteboard.canvas;
+//   canvas.isDrawingMode = true;
+// }
 
-function selectFun() {
+// function selectFun() {
 
-  var canvas = Whiteboard.canvas;
-  canvas.isDrawingMode = false;
-}
+//   var canvas = Whiteboard.canvas;
+//   canvas.isDrawingMode = false;
+// }
 
-function drawFun() {
+// function drawFun() {
 
-  var canvas = Whiteboard.canvas;
-  canvas.isDrawingMode = true;
-}
+//   var canvas = Whiteboard.canvas;
+//   canvas.isDrawingMode = true;
+// }
