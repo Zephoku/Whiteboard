@@ -241,6 +241,7 @@ function initCanvas(firebase, canvas) {
 function updateCanvas(snapshot, canvas) {
     canvas.loadFromJSON(snapshot.val());
     backToZoom(canvas);
+    panTouchWithoutRender(canvas, Whiteboard.xOffset, Whiteboard.yOffset);
     canvas.renderAll();
 }
 
@@ -292,8 +293,6 @@ function pinchZoomOut(canvas, factor) {
   canvas.renderAll();
   Whiteboard.canvasScale *= factor;
 }
-
-
 
 
 
@@ -478,9 +477,34 @@ function panTouch(canvas, xOffset, yOffset) {
   }
 
     canvas.renderAll();
+
     Whiteboard.xOffset += xOffset;
     Whiteboard.yOffset += yOffset;
+    //console.log("Current x & y offset: " + Whiteboard.xOffset + " " + Whiteboard.yOffset);
+}
 
+
+
+
+function panTouchWithoutRender(canvas, xOffset, yOffset) {
+  var objects = canvas.getObjects();
+
+ // xOffset /= Whiteboard.canvasScale;
+  //yOffset /= Whiteboard.canvasScale;
+
+  for (var i in objects) {
+  
+      var left = objects[i].left;
+      var top = objects[i].top;
+  
+      var tempLeft = left + xOffset;
+      var tempTop = top + yOffset;
+
+      objects[i].left = tempLeft;
+      objects[i].top = tempTop;
+
+      objects[i].setCoords();
+  }
 }
 
 
@@ -636,8 +660,23 @@ function functUndo(canvas, stackErase)
 
 function updateOnEvent(eventName, firebase, canvas) {
   canvas.on(eventName, function() {
+    panTouchWithoutRender(canvas, Whiteboard.xOffset * (-1), Whiteboard.yOffset*(-1));
     updateFirebase(firebase, canvas);
+    panTouchWithoutRender(canvas, Whiteboard.xOffset, Whiteboard.yOffset);
+   // canvas.renderAll();
   });
+}
+
+function selectFun() {
+
+  var canvas = Whiteboard.canvas;
+  canvas.isDrawingMode = false;
+}
+
+function drawFun() {
+
+  var canvas = Whiteboard.canvas;
+  canvas.isDrawingMode = true;
 }
 
 function selectFun() {
